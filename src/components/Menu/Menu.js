@@ -3,6 +3,19 @@ import $ from 'jquery';
 import 'bootstrap';
 import iconcolor from '../../assets/img/iconcolor.png';
 import logosidebar from '../../assets/img/logosidebar.png';
+import CalendarioLaboral from '../CalendarioLaboral/CalendarioLaboral';
+import Fichajes from '../Fichajes/Fichajes';
+import Informes from '../Informes/Informes';
+import PanelDeControl from '../PanelDeControl/PanelDeControl';
+import AddTrabajador from '../Trabajadores/AddTrabajador';
+import TodosLosTrabajadores from '../Trabajadores/TodosLosTrabajadores';
+import Trabajador from '../Trabajadores/Trabajador';
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    NavLink
+  } from 'react-router-dom';
 
 const Menu = () => {
       useEffect(() => {
@@ -60,70 +73,68 @@ const Menu = () => {
       }, [])
       
     return (
-        <ul className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-            <a className="sidebar-brand d-flex align-items-center justify-content-center" href="panel-de-control.html">
-                <div className="sidebar-brand-icon" style={{display: 'none'}}>
-                    <img src={iconcolor} alt="" />
-                </div>
-                <div className="sidebar-brand-text mx-3">
-                    <img src={logosidebar} alt="Fichaje por voz" />
-                </div>
-            </a>
-            <hr className="sidebar-divider my-0" />
-            <li className="nav-item">
-                <a className="nav-link" href="panel-de-control.html">
-                    <i className="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Panel de Control</span></a>
-            </li>
-            <hr className="sidebar-divider" />
-            <div className="sidebar-heading">
-                MENÚ GENERAL
-            </div>
-            <li className="nav-item">
-                <a className="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTrabajadores"
-                    aria-expanded="false" aria-controls="collapseTrabajadores">
-                    <i className="fas fa-fw fa-users"></i>
-                    <span>Trabajadores</span>
-                </a>
-                <div id="collapseTrabajadores" className="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div className="bg-white py-2 collapse-inner rounded">
-                        <a className="collapse-item" href="trabajadores.html">Todos los Trabajadores</a>
-                        <a className="collapse-item" href="nuevo-trabajador.html">Añadir Trabajador</a>
+        <Router>
+            <ul className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion testSanty" id="accordionSidebar">
+                <a className="sidebar-brand d-flex align-items-center justify-content-center" href="panel-de-control.html">
+                    <div className="sidebar-brand-icon" style={{display: 'none'}}>
+                        <img src={iconcolor} alt="" />
                     </div>
+                    <div className="sidebar-brand-text mx-3">
+                        <img src={logosidebar} alt="Fichaje por voz" />
+                    </div>
+                </a>
+                <hr className="sidebar-divider my-0" />
+                <li className="nav-item">
+                    <NavLink exact activeClassName="active" className="non-active nav-link" to="/"><i className="fas fa-fw fa-tachometer-alt"></i> <span>Panel de control</span></NavLink>
+                </li>
+                <hr className="sidebar-divider" />
+                <div className="sidebar-heading">
+                    MENÚ GENERAL
                 </div>
-            </li>
-            <li className="nav-item">
-                <a className="nav-link" href="fichajes.html">
-                    <i className="fas fa-microphone"></i>
-                    <span>Fichajes</span>
-                </a>
-            </li>
-            <li className="nav-item active">
-                <a className="nav-link" href="calendario-laboral.html">
-                    <i className="fas fa-calendar-alt"></i>
-                    <span>Calendario Laboral</span>
-                </a>
-            </li>
-            <hr className="sidebar-divider" />
-            <div className="sidebar-heading">
-                OTROS
-            </div>
-            <li className="nav-item">
-                <a className="nav-link" href="informes.html">
-                    <i className="fas fa-chart-line"></i>
-                    <span>Informes</span>
-                </a>
-            </li>
-            <li className="nav-item">
-                <a className="nav-link" href="'">
-                    <i className="fas fa-fw fa-cog"></i>
-                    <span>Configuración</span></a>
-            </li>
-            <hr className="sidebar-divider d-none d-md-block" />
-            <div className="text-center d-none d-md-inline">
-                <button className="rounded-circle border-0" id="sidebarToggle"></button>
-            </div>
-        </ul>
+                <li className="nav-item">
+                    <a className="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTrabajadores"
+                        aria-expanded="false" aria-controls="collapseTrabajadores">
+                        <i className="fas fa-fw fa-users"></i>
+                        <span>Trabajadores</span>
+                    </a>
+                    <div id="collapseTrabajadores" className="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div className="bg-white py-2 collapse-inner rounded">
+                            <NavLink exact activeClassName="active" className="non-active collapse-item" to="/trabajadores">Todos los trabajadores</NavLink>
+                            <NavLink exact activeClassName="active" className="non-active collapse-item" to="/nuevo-trabajador">Añadir Trabajador</NavLink>
+                        </div>
+                    </div>
+                </li>
+                <li className="nav-item">
+                    <NavLink exact activeClassName="active" className="non-active nav-link" to="/fichajes"><i className="fas fa-microphone"></i> <span>Fichajes</span></NavLink>
+                </li>
+                <li className="nav-item active">
+                    <NavLink exact activeClassName="active" className="non-active nav-link" to="/calendario-laboral"><i className="fas fa-calendar-alt"></i> <span>Calendario laboral</span></NavLink>
+                </li>
+                <hr className="sidebar-divider" />
+                <div className="sidebar-heading">
+                    OTROS
+                </div>
+                <li className="nav-item">
+                    <NavLink exact activeClassName="active" className="non-active nav-link" to="/informes"><i className="fas fa-chart-line"></i> <span>Informes</span></NavLink>
+                </li>
+                <li className="nav-item">
+                    <NavLink exact activeClassName="active" className="non-active nav-link" to="/"><i className="fas fa-fw fa-cog"></i> <span>Configuración</span></NavLink>
+                </li>
+                <hr className="sidebar-divider d-none d-md-block" />
+                <div className="text-center d-none d-md-inline">
+                    <button className="rounded-circle border-0" id="sidebarToggle"></button>
+                </div>
+            </ul>
+            
+            <Switch>
+                <Route exact path="/trabajadores" component={TodosLosTrabajadores} />
+                <Route exact path="/nuevo-trabajador" component={AddTrabajador} />
+                <Route exact path="/fichajes" component={Fichajes} />
+                <Route exact path="/calendario-laboral" component={CalendarioLaboral} />
+                <Route exact path="/informes" component={Informes} />
+                <Route path="/" component={PanelDeControl} />
+            </Switch> 
+        </Router>
     )
 }
 

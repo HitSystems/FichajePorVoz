@@ -4,7 +4,9 @@ import Menu from './components/Menu/Menu';
 
 function App() {
   return (
-    <Menu />
+    <div id='wrapper'>
+      <Menu />
+    </div>
   );
 }
 

@@ -1,8 +1,10 @@
 import React from 'react'
-
+import Topbar from '../Topbar/Topbar'
 const Fichajes = () => {
     return (
-        <div className="container-fluid">
+        <div id='content'>
+            <Topbar />
+         <div className="container-fluid">
         <div className="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 className="h3 mb-1 text-gray-800 title-section"><i className="fas fa-microphone"></i> Fichajes</h1>
             <a href="#" className="btn btn-primary btn-icon-split btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#modalFichar">
@@ -214,6 +216,7 @@ const Fichajes = () => {
                     </form>
                 </div>
             </div>
+        </div>
         </div>
         </div>
     )
