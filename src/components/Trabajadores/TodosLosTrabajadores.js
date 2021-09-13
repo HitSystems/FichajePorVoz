@@ -1,7 +1,12 @@
 import React from 'react';
+import Topbar from '../Topbar/Topbar';
+import Footer from '../Footer/Footer'
 
 const TodosLosTrabajadores = () => {
     return (
+        <div id='content-wrapper' className='d-flex flex-column'>
+        <div id='content'>
+            <Topbar />
         <div className="container-fluid">
             <div className="d-sm-flex align-items-center justify-content-between mb-4">
                 <h1 className="h3 mb-1 text-gray-800 title-section"><i className="fas fa-users"></i> Trabajadores</h1>
@@ -124,6 +129,9 @@ const TodosLosTrabajadores = () => {
                     </nav>
                 </div>
             </div>
+        </div>
+        </div>
+        <Footer />
         </div>
     )
 }

@@ -10,6 +10,8 @@ import PanelDeControl from '../PanelDeControl/PanelDeControl';
 import AddTrabajador from '../Trabajadores/AddTrabajador';
 import TodosLosTrabajadores from '../Trabajadores/TodosLosTrabajadores';
 import Trabajador from '../Trabajadores/Trabajador';
+import Login from '../Login/Login';
+import Register from '../Register/Register';
 import {
     BrowserRouter as Router,
     Switch,
@@ -132,6 +134,8 @@ const Menu = () => {
                 <Route exact path="/fichajes" component={Fichajes} />
                 <Route exact path="/calendario-laboral" component={CalendarioLaboral} />
                 <Route exact path="/informes" component={Informes} />
+                <Route exact path="/registrarse" component={Register} />
+                <Route exact path="/iniciar-sesion" component={Login} />
                 <Route path="/" component={PanelDeControl} />
             </Switch> 
         </Router>

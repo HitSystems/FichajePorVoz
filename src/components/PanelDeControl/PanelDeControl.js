@@ -1,13 +1,26 @@
-import React from 'react'
-
+import React from 'react';
+import Topbar from '../Topbar/Topbar';
+import Footer from '../Footer/Footer';
+import { dia, mes, year } from '../../helpers/fechas';
+import calendario from '../../assets/img/calendario.jpg';
+import fichajes from '../../assets/img/fichajes.jpg';
+import horasrealizadas  from '../../assets/img/horasrealizadas.jpg';
+import logo from '../../assets/img/logo.png';
+import trabajadores from '../../assets/img/trabajadores.jpg';
 const PanelDeControl = () => {
     return (
-        <>
+        <div id='content-wrapper' className='d-flex flex-column'>
+        <div id='content'>
+            <Topbar />
+            <div className='container-fluid'>
+            <div className='text-center logo-home'>
+                <img src={logo} alt='Fichaje Por Voz' />
+            </div>
             <div className="row links-home-top">
             <div className="col-xl-3 col-md-6 mb-4">
                 <a href="trabajadores.html">
                     <div className="card shadow h-100">
-                        <img src="img/trabajadores.webp" alt="Trabajadores" />
+                        <img src={trabajadores} alt="Trabajadores" />
                         <div className="card-body">
                         <div className="row no-gutters align-items-center">
                             <div className="col mr-2">
@@ -27,14 +40,14 @@ const PanelDeControl = () => {
             <div className="col-xl-3 col-md-6 mb-4">
                 <a href="fichajes.html">
                     <div className="card shadow h-100">
-                        <img src="img/fichajes.jpg" alt="Fichajes" />
+                        <img src={fichajes} alt="Fichajes" />
                         <div className="card-body">
                         <div className="row no-gutters align-items-center">
                             <div className="col mr-2">
                                 <div className="text-xs font-weight-bold text-success text-uppercase mb-1">
                                     Fichajes
                                 </div>
-                                <div className="h5 mb-0 font-weight-bold text-gray-800">Hoy: 09/11</div>
+                                <div className="h5 mb-0 font-weight-bold text-gray-800">Hoy: {dia}/{mes}</div>
                             </div>
                             <div className="col-auto">
                                 <i className="fas fa-microphone fa-2x text-gray-300"></i>
@@ -47,7 +60,7 @@ const PanelDeControl = () => {
             <div className="col-xl-3 col-md-6 mb-4">
                 <a href="informes.html">
                     <div className="card shadow h-100">
-                        <img src="img/horas-realizadas.jpg" alt="Horas Realizadas" />
+                        <img src={horasrealizadas} alt="Horas Realizadas" />
                         <div className="card-body">
                         <div className="row no-gutters align-items-center">
                             <div className="col mr-2">
@@ -76,14 +89,14 @@ const PanelDeControl = () => {
             <div className="col-xl-3 col-md-6 mb-4">
                 <a href="calendario-laboral.html">
                     <div className="card shadow h-100">
-                        <img src="img/calendario.jpg" alt="Calendario" />
+                        <img src={calendario} alt="Calendario" />
                         <div className="card-body">
                         <div className="row no-gutters align-items-center">
                             <div className="col mr-2">
                                 <div className="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                     Calendario
                                 </div>
-                                <div className="h5 mb-0 font-weight-bold text-gray-800">01-02-2021</div>
+                                <div className="h5 mb-0 font-weight-bold text-gray-800">{dia}-{mes}-{year}</div>
                             </div>
                             <div className="col-auto">
                                 <i className="fas fa-calendar-alt fa-2x text-gray-300"></i>
@@ -158,8 +171,11 @@ const PanelDeControl = () => {
                 </a>
             </div>
             </div>
-        </>
+            </div>
+            </div>
+            <Footer />
+        </div>
     )
 }
 
-export default PanelDeControl
+export default PanelDeControl;

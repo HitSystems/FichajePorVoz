@@ -1,0 +1,35 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-fichajeporvoz-dev-104038-authRole",
+      "UnauthRoleArn": "arn:aws:iam::118802092521:role/amplify-fichajeporvoz-dev-104038-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::118802092521:role/amplify-fichajeporvoz-dev-104038-authRole",
+      "Region": "eu-west-2",
+      "DeploymentBucketName": "amplify-fichajeporvoz-dev-104038-deployment",
+      "UnauthRoleName": "amplify-fichajeporvoz-dev-104038-unauthRole",
+      "StackName": "amplify-fichajeporvoz-dev-104038",
+      "StackId": "arn:aws:cloudformation:eu-west-2:118802092521:stack/amplify-fichajeporvoz-dev-104038/47cf5190-146e-11ec-bafd-02c61ff72590",
+      "AmplifyAppId": "d3h1k5271ehjgo"
+    },
+    "categories": {
+      "function": {
+        "fichajeporvoz6dc20ca8CustomMessage": {
+          "REDIRECTURL": "https://fichajeporvoz.com",
+          "EMAILSUBJECT": "Verifición email",
+          "EMAILMESSAGE": "Haz click en el enlace para verificar tu correo electrónico.",
+          "deploymentBucketName": "amplify-fichajeporvoz-dev-104038-deployment",
+          "s3Key": "amplify-builds/fichajeporvoz6dc20ca8CustomMessage-4e6c4f6f354f4a7a6453-build.zip"
+        }
+      },
+      "auth": {
+        "fichajeporvoz6dc20ca8": {}
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d3h1k5271ehjgo",
+          "type": "manual"
+        }
+      }
+    }
+  }
+}

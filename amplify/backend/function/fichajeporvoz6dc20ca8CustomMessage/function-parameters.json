@@ -1,0 +1,26 @@
+{
+  "trigger": true,
+  "modules": [
+    "verification-link"
+  ],
+  "parentResource": "fichajeporvoz6dc20ca8",
+  "functionName": "fichajeporvoz6dc20ca8CustomMessage",
+  "resourceName": "fichajeporvoz6dc20ca8CustomMessage",
+  "parentStack": "auth",
+  "triggerEnvs": [
+    {
+      "key": "RESOURCENAME",
+      "value": "resourceName"
+    }
+  ],
+  "triggerDir": "/usr/local/lib/node_modules/@aws-amplify/cli/node_modules/amplify-category-auth/provider-utils/awscloudformation/triggers/CustomMessage",
+  "triggerTemplate": "CustomMessage.json.ejs",
+  "triggerEventPath": "CustomMessage.event.json",
+  "roleName": "fichajeporvoz6dc20ca8CustomMessage",
+  "skipEdit": true,
+  "REDIRECTURL": "https://fichajeporvoz.com",
+  "EMAILSUBJECT": "Verifición email",
+  "EMAILMESSAGE": "Haz click en el enlace para verificar tu correo electrónico.",
+  "RESOURCENAME": "resourceName",
+  "enableCors": false
+}

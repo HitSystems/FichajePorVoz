@@ -2769,6 +2769,7 @@ fieldset:disabled a.btn {
   color: #fff;
   background-color: #1cc88a;
   border-color: #1cc88a;
+  margin-right: 5px;
 }
 
 .btn-success:hover {
@@ -11614,6 +11615,9 @@ footer.sticky-footer .copyright {
 
 body.sidebar-toggled footer.sticky-footer {
   width: 100%;
+}
+.btn-success {
+
 }
 /*!
  * Start Bootstrap - SB Admin 2 v4.1.4 (https://startbootstrap.com/theme/sb-admin-2)

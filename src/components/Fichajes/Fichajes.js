@@ -1,7 +1,10 @@
-import React from 'react'
-import Topbar from '../Topbar/Topbar'
+import React from 'react';
+import Footer from '../Footer/Footer';
+import Topbar from '../Topbar/Topbar';
+
 const Fichajes = () => {
     return (
+        <div id="content-wrapper" class="d-flex flex-column">
         <div id='content'>
             <Topbar />
          <div className="container-fluid">
@@ -219,7 +222,9 @@ const Fichajes = () => {
         </div>
         </div>
         </div>
+            <Footer />
+        </div>
     )
 }
 
-export default Fichajes
+export default Fichajes;
