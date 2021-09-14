@@ -1,8 +1,45 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import { cookies } from '../../helpers/cookies';
 import Footer from '../Footer/Footer';
 import Topbar from '../Topbar/Topbar';
 
 const Fichajes = () => {
+    const [trabajadores, setTrabajadores] = useState([]);
+    const [fichajes, setFichajes] = useState([]);
+    const [datosConsulta, setDatosConsulta] = useState({
+        trabajador: 0,
+        year: 2021,
+        mes: 9,
+        franjaHoraria: 0
+    })
+
+    useEffect(() => {
+        axios.get(`http://localhost:3030/users?empresa=${cookies.get('empresa')}`).then((data) => {
+            setTrabajadores(data.data);
+        });
+        let {trabajador, year, mes, franjaHoraria} = datosConsulta;
+        let urlFichajes = `http://localhost:3030/fichajes?empresa=${cookies.get('empresa')}&trabajador=${trabajador}&year=${year}&mes=${mes}&franjaHoraria=${franjaHoraria}`;
+        axios.get(urlFichajes).then((data) => {
+            setFichajes(data.data);
+        });
+    }, []);
+
+    const handleOnChange = (e) => {
+        setDatosConsulta({
+            ...datosConsulta,
+            [e.target.name]: e.target.value
+        });
+    }
+    const handleOnClick = (e) => {
+        e.preventDefault();
+        let {trabajador, year, mes, franjaHoraria} = datosConsulta;
+        let urlFichajes = `http://localhost:3030/fichajes?empresa=${cookies.get('empresa')}&trabajador=${trabajador}&year=${year}&mes=${mes}&franjaHoraria=${franjaHoraria}`;
+        axios.get(urlFichajes).then((data) => {
+            setFichajes(data.data);
+        });
+    }
+
     return (
         <div id="content-wrapper" class="d-flex flex-column">
         <div id='content'>
@@ -27,50 +64,49 @@ const Fichajes = () => {
                     <div className="row">
                         <div className="col-md-2">
                             <div className="form-group">
-                                <select className="form-control">
-                                <option value="">Todos los trabajadores</option>
-                                <option value="11">Ariadna Cardenas</option>
-                                <option value="10">Cristina Closa Roig</option>
-                                <option value="1">Grafix</option>
-                                <option value="5">Jennifer López Crespo</option>
-                                <option value="2">Jordi Grivé Turigas</option>
-                                <option value="3">Jose Ma Paniagua Sanchez</option>
-                                <option value="9">Marc Girbau Nogueira</option>
-                                <option value="4">Marc Gonzalez Girbau</option>
-                                <option value="6">Marti Duran Fernandez</option>
-                                <option value="12">sandra</option>
-                                <option value="8">Santiago Camp Estrada</option>
+                                <select className="form-control" name='trabajador' onChange={handleOnChange}>
+                                <option value="0">Todos los trabajadores</option>
+                                {
+                                    trabajadores.map(({id, nombre, empresa}, index) => <option value={id} id={id} key={id} className={cookies.get('empresa')}>{nombre}</option> )
+                                }
                                 </select>
                             </div>
                         </div>
                         <div className="col-md-2">
                             <div className="form-group">
-                                <select className="form-control">
-                                <option>2021</option>
-                                <option>2020</option>
-                                <option>2019</option>
-                                <option>2018</option>
-                                <option>2017</option>
+                                <select className="form-control" name='year' onChange={handleOnChange}>
+                                <option value='2021'>2021</option>
+                                <option value='2020'>2020</option>
+                                <option value='2019'>2019</option>
+                                <option value='2018'>2018</option>
+                                <option value='2017'>2017</option>
                                 </select>
                             </div>
                         </div>
                         <div className="col-md-2">
                             <div className="form-group">
-                                <select className="form-control">
-                                <option>Enero</option>
-                                <option>Febrero</option>
-                                <option>Marzo</option>
-                                <option>Abril</option>
-                                <option>Mayo</option>
+                                <select className="form-control" name='mes' onChange={handleOnChange}>
+                                <option value='1'>Enero</option>
+                                <option value='2'>Febrero</option>
+                                <option value='3'>Marzo</option>
+                                <option value='4'>Abril</option>
+                                <option value='5'>Mayo</option>
+                                <option value='6'>Junio</option>
+                                <option value='7'>Julio</option>
+                                <option value='8'>Agosto</option>
+                                <option value='9'>Septiembre</option>
+                                <option value='10'>Octubre</option>
+                                <option value='11'>Noviembre</option>
+                                <option value='12'>Diciembre</option>
                                 </select>
                             </div>
                         </div>
                         <div className="col-md-2">
                             <div className="form-group">
-                                <select className="form-control">
-                                <option>Todo el día</option>
-                                <option>Mañana</option>
-                                <option>Tarde</option>
+                                <select className="form-control" name='franjaHoraria' onChange={handleOnChange}>
+                                <option value='0'>Todo el día</option>
+                                <option value='1'>Mañana</option>
+                                <option value='2'>Tarde</option>
                                 </select>
                             </div>
                         </div>
@@ -78,7 +114,7 @@ const Fichajes = () => {
                             <input type="search" className="form-control" placeholder="Buscar" />
                         </div>
                         <div className="col-md-2" style={{'margin-top': '4px'}}>
-                            <button type="submit" className="btn btn-primary btn-sm">
+                            <button type="submit" className="btn btn-primary btn-sm" onClick={handleOnClick}>
                             <i className="fas fa-filter"></i>
                             </button>
                             <a href="#" className="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Descargar CSV">
@@ -94,45 +130,43 @@ const Fichajes = () => {
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Estado</th>
-                            <th scope="col">Imagen</th>
                             <th scope="col">Nombre</th>
                             <th scope="col">Fecha</th>
-                            <th scope="col">Entrada Mañana</th>
-                            <th scope="col">Salida Mañana</th>
-                            <th scope="col">Entrada Tarde</th>
-                            <th scope="col">Salida Tarde</th>
+                            <th scope="col">Hora</th>
+                            <th scope="col">Accion</th>
                             <th scope="col">Comentario</th>
                             <th scope="col">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>
-                                <i className="fas fa-check-circle" style={{color: '#1cc88a'}}></i>
-                                <i className="fas fa-times-circle"></i>
-                            </td>
-                            <td>
-                                <img className="rounded-circle" src="img/santi.jpg" alt="Santiago Camp Estrada" style={{width: '30px', height: '30px'}} />
-                            </td>
-                            <td>Santiago Camp Estrada</td>
-                            <td>01-07-2021</td>
-                            <td>08:00h</td>
-                            <td>14:00h</td>
-                            <td>15:00h</td>
-                            <td>17:30h</td>
-                            <td>
-                                lorem ipsum dolor sit amet consecteur...
-                            </td>
-                            <td>
-                                <a href="#" className="btn btn-success btn-icon-split btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#modalEdit">
-                                <span className="icon text-white-50">
-                                <i className="fas fa-pencil-alt"></i>
-                                </span>
-                                <span className="text">Comentario</span>
-                                </a>
-                            </td>
-                        </tr>
+                        {
+                            fichajes.map(({fecha, hora, accio, nom}, index) => {
+                                let accioNombre = accio === 1 ? 'Entrada' : 'Salida';
+                                return (
+                                    <tr key={index}>
+                                        <td>{index}</td>
+                                        <td>
+                                            <i className="fas fa-check-circle" style={{color: '#1cc88a'}}></i>
+                                            <i className="fas fa-times-circle"></i>
+                                        </td>
+                                        <td>{nom}</td>
+                                        <td>{fecha}</td>
+                                        <td>{hora}</td>
+                                        <td>{accioNombre}</td>
+                                        <td></td>
+                                        <td>
+                                            <a href="#" className="btn btn-success btn-icon-split btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#modalEdit">
+                                            <span className="icon text-white-50">
+                                            <i className="fas fa-pencil-alt"></i>
+                                            </span>
+                                            <span className="text">Comentario</span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                )
+                            })
+                        }
+
                     </tbody>
                     </table>
                 </div>

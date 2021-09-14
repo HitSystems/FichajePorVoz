@@ -11616,9 +11616,59 @@ footer.sticky-footer .copyright {
 body.sidebar-toggled footer.sticky-footer {
   width: 100%;
 }
-.btn-success {
-
+/**/
+.bg-gradient-primary {
+  background: url(https://fichaje.devgrafix.com/wp-content/uploads/2021/05/alexa-bg-scaled.jpg) no-repeat center top !important
+  ;
+  background-size: cover;
+  background-attachment: fixed;
 }
+.card-login {
+  border-radius: 60px;
+}
+.bg-login-image {
+  background-image: url('assets/img/login.jpg') !important;
+}
+.logo-login {
+  max-width: 400px;
+  margin: 100px auto 0px auto;
+}
+.logo-login img {
+  width: 100%;
+}
+h2 {
+  font-size: 25px;
+  width: 100%;
+  color: #fff;
+  margin-top: 30px;
+  font-weight: 100;
+}
+.btn-login {
+  background: #251e61;
+  border-color: #251e61;
+}
+@media (max-width: 414px){
+  .logo-login {
+      max-width: 300px;
+      margin-top: 70px;
+  }
+  h2 {
+      font-size: 22px;
+  }
+}
+.copyright {
+  color: #fff;
+}
+.copyright a {
+  color: #fff;
+  text-decoration: underline;
+}
+.copy-grafix {
+  margin-left: 20px;
+  border-left: 1px solid;
+  padding-left: 22px;
+}
+
 /*!
  * Start Bootstrap - SB Admin 2 v4.1.4 (https://startbootstrap.com/theme/sb-admin-2)
  * Copyright 2013-2021 Start Bootstrap

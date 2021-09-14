@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
 import $ from 'jquery';
 import 'bootstrap';
 import iconcolor from '../../assets/img/iconcolor.png';
@@ -109,7 +109,7 @@ const Menu = () => {
                 <li className="nav-item">
                     <NavLink exact activeClassName="active" className="non-active nav-link" to="/fichajes"><i className="fas fa-microphone"></i> <span>Fichajes</span></NavLink>
                 </li>
-                <li className="nav-item active">
+                <li className="nav-item">
                     <NavLink exact activeClassName="active" className="non-active nav-link" to="/calendario-laboral"><i className="fas fa-calendar-alt"></i> <span>Calendario laboral</span></NavLink>
                 </li>
                 <hr className="sidebar-divider" />
