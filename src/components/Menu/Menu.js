@@ -18,6 +18,7 @@ import {
     Route,
     NavLink
   } from 'react-router-dom';
+import Perfil from '../Perfil/Perfil';
 
 const Menu = () => {
       useEffect(() => {
@@ -136,6 +137,7 @@ const Menu = () => {
                 <Route exact path="/informes" component={Informes} />
                 <Route exact path="/registrarse" component={Register} />
                 <Route exact path="/iniciar-sesion" component={Login} />
+                <Route exact path="/perfil" component={Perfil} />
                 <Route path="/" component={PanelDeControl} />
             </Switch> 
         </Router>

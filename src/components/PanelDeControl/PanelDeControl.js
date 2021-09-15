@@ -11,6 +11,9 @@ import { cookies } from '../../helpers/cookies';
 import axios from 'axios';
 const PanelDeControl = () => {
     cookies.set('empresa', 'Fac_DemoGrafix');
+    cookies.set('nombre', 'Juan');
+    cookies.set('mail', 'demohit@gmail.com');
+    cookies.set('idUsuario', '2');
     const [userData, setUserData] = useState({
         totalTrabajadores: 0,
     });
