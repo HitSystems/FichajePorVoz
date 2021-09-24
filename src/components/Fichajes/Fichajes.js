@@ -15,11 +15,11 @@ const Fichajes = () => {
     })
 
     useEffect(() => {
-        axios.get(`http://localhost:3030/users?empresa=${cookies.get('empresa')}`).then((data) => {
+        axios.get(`http://54.74.52.150:3030/users?empresa=${cookies.get('empresa')}`).then((data) => {
             setTrabajadores(data.data);
         });
         let {trabajador, year, mes, franjaHoraria} = datosConsulta;
-        let urlFichajes = `http://localhost:3030/fichajes?empresa=${cookies.get('empresa')}&trabajador=${trabajador}&year=${year}&mes=${mes}&franjaHoraria=${franjaHoraria}`;
+        let urlFichajes = `http://54.74.52.150:3030/fichajes?empresa=${cookies.get('empresa')}&trabajador=${trabajador}&year=${year}&mes=${mes}&franjaHoraria=${franjaHoraria}`;
         axios.get(urlFichajes).then((data) => {
             setFichajes(data.data);
         });
@@ -34,7 +34,7 @@ const Fichajes = () => {
     const handleOnClick = (e) => {
         e.preventDefault();
         let {trabajador, year, mes, franjaHoraria} = datosConsulta;
-        let urlFichajes = `http://localhost:3030/fichajes?empresa=${cookies.get('empresa')}&trabajador=${trabajador}&year=${year}&mes=${mes}&franjaHoraria=${franjaHoraria}`;
+        let urlFichajes = `http://54.74.52.150:3030/fichajes?empresa=${cookies.get('empresa')}&trabajador=${trabajador}&year=${year}&mes=${mes}&franjaHoraria=${franjaHoraria}`;
         axios.get(urlFichajes).then((data) => {
             setFichajes(data.data);
         });

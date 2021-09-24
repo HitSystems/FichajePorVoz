@@ -57,14 +57,6 @@ const AddTrabajador = () => {
                                     <label for="email">Correo Electrónico</label>
                                     <input type="email" className="form-control" id="email" placeholder="email" />
                                 </div>
-                                <div className="col-md-4">
-                                    <label for="pass">Contraseña</label>
-                                    <input type="password" className="form-control" id="pass" placeholder="Contraseña" />
-                                </div>
-                                <div className="col-md-4">
-                                    <label for="pass2">Repetir Contraseña</label>
-                                    <input type="password" className="form-control" id="pass2" placeholder="Repetir Contraseña" />
-                                </div>
                             </div>
                             <br />
                             <div className="row">

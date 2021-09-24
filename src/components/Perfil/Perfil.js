@@ -10,7 +10,7 @@ const Perfil = () => {
         direccion: ''
     });
     useEffect(() => {
-        axios.get(`http://localhost:3030/datosTrabajador?empresa=${cookies.get('empresa')}&idUsuario=${cookies.get('idUsuario')}`).then((data) => {
+        axios.get(`http://54.74.52.150:3030/datosTrabajador?empresa=${cookies.get('empresa')}&idUsuario=${cookies.get('idUsuario')}`).then((data) => {
             setDatosTrabajador({
                 telefono: '',
                 movil: data.data.movil,

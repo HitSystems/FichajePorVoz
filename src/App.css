@@ -11668,7 +11668,31 @@ h2 {
   border-left: 1px solid;
   padding-left: 22px;
 }
-
+#align input, #align select {
+  float: right;
+  width: 15rem;
+}
+#align label {
+  text-align: justify;
+}
+#calendarLegend {
+  margin-top: 3rem;
+  display: flex;
+  justify-content: center;
+  margin-left: -6rem;
+}
+#calendarLegend span {
+  margin: auto 3rem;
+  text-align: center;
+}
+.dot {
+  height: 25px;
+  width: 25px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  border: 1px solid black;
+}
 /*!
  * Start Bootstrap - SB Admin 2 v4.1.4 (https://startbootstrap.com/theme/sb-admin-2)
  * Copyright 2013-2021 Start Bootstrap

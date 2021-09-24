@@ -9,6 +9,7 @@ import logo from '../../assets/img/logo.png';
 import trabajadores from '../../assets/img/trabajadores.jpg';
 import { cookies } from '../../helpers/cookies';
 import axios from 'axios';
+import { NavLink } from 'react-router-dom';
 const PanelDeControl = () => {
     cookies.set('empresa', 'Fac_DemoGrafix');
     cookies.set('nombre', 'Juan');
@@ -19,15 +20,13 @@ const PanelDeControl = () => {
     });
     const [activos, setActivos] = useState([])
     useEffect(() => {
-        axios.get(`http://localhost:3030/totalTrabajadores?empresa=${cookies.get('empresa')}`).then((data) => {
+        axios.get(`http://54.74.52.150:3030/totalTrabajadores?empresa=${cookies.get('empresa')}`).then((data) => {
             setUserData({
                 totalTrabajadores: data.data.total-1
             })
-            console.log(1)
         });
-        axios.get(`http://localhost:3030/trabajadoresActivos?empresa=${cookies.get('empresa')}`).then((data) => {
+        axios.get(`http://54.74.52.150:3030/trabajadoresActivos?empresa=${cookies.get('empresa')}`).then((data) => {
             let activos = [];
-                console.log(data.data);
             for(let i in data.data) {
                 activos.push({
                     nombre: data.data[i].nom,
@@ -48,7 +47,7 @@ const PanelDeControl = () => {
             </div>
             <div className="row links-home-top">
             <div className="col-xl-3 col-md-6 mb-4">
-                <a href="trabajadores.html">
+                <NavLink exact to='/FichajePorVoz/trabajadores'>
                     <div className="card shadow h-100">
                         <img src={trabajadores} alt="Trabajadores" />
                         <div className="card-body">
@@ -65,10 +64,10 @@ const PanelDeControl = () => {
                         </div>
                         </div>
                     </div>
-                </a>
+                </NavLink>
             </div>
             <div className="col-xl-3 col-md-6 mb-4">
-                <a href="fichajes.html">
+                <NavLink exact to="/FichajePorVoz/fichajes">
                     <div className="card shadow h-100">
                         <img src={fichajes} alt="Fichajes" />
                         <div className="card-body">
@@ -85,10 +84,10 @@ const PanelDeControl = () => {
                         </div>
                         </div>
                     </div>
-                </a>
+                </NavLink>
             </div>
             <div className="col-xl-3 col-md-6 mb-4">
-                <a href="informes.html">
+                <NavLink exact to="/FichajePorVoz/informes">
                     <div className="card shadow h-100">
                         <img src={horasrealizadas} alt="Horas Realizadas" />
                         <div className="card-body">
@@ -114,10 +113,10 @@ const PanelDeControl = () => {
                         </div>
                         </div>
                     </div>
-                </a>
+                </NavLink>
             </div>
             <div className="col-xl-3 col-md-6 mb-4">
-                <a href="calendario-laboral.html">
+                <NavLink exact to="/FichajePorVoz/calendario-laboral">
                     <div className="card shadow h-100">
                         <img src={calendario} alt="Calendario" />
                         <div className="card-body">
@@ -134,7 +133,7 @@ const PanelDeControl = () => {
                         </div>
                         </div>
                     </div>
-                </a>
+                </NavLink>
             </div>
             </div>
             <hr />

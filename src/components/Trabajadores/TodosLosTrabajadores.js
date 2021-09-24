@@ -1,8 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Topbar from '../Topbar/Topbar';
-import Footer from '../Footer/Footer'
+import Footer from '../Footer/Footer';
+import axios from 'axios';
+import { cookies } from '../../helpers/cookies';
 
 const TodosLosTrabajadores = () => {
+    const [trabajadores, setTrabajadores] = useState([]);
+    useEffect(() => {
+        axios.get(`http://54.74.52.150:3030/users?empresa=${cookies.get('empresa')}`).then((data) => {
+            setTrabajadores(data.data);
+        });
+    }, [])
     return (
         <div id='content-wrapper' className='d-flex flex-column'>
         <div id='content'>
@@ -10,7 +18,7 @@ const TodosLosTrabajadores = () => {
         <div className="container-fluid">
             <div className="d-sm-flex align-items-center justify-content-between mb-4">
                 <h1 className="h3 mb-1 text-gray-800 title-section"><i className="fas fa-users"></i> Trabajadores</h1>
-                <a href="nuevo-trabajador.html" className="btn btn-primary btn-icon-split btn-sm btn-primary shadow-sm">
+                <a href="/nuevo-trabajador" className="btn btn-primary btn-icon-split btn-sm btn-primary shadow-sm">
                 <span className="icon text-white-50">
                 <i className="fas fa-plus"></i>
                 </span>
@@ -80,7 +88,6 @@ const TodosLosTrabajadores = () => {
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">Estado</th>
-                                    <th scope="col">Imagen</th>
                                     <th scope="col">Nombre</th>
                                     <th scope="col">Alta</th>
                                     <th scope="col">Horas Totales</th>
@@ -88,29 +95,26 @@ const TodosLosTrabajadores = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>
-                                    <i className="fas fa-check-circle" style={{color: '#1cc88a'}}></i>
-                                    <i className="fas fa-times-circle"></i>
-                                    </td>
-                                    <td>
-                                    <img className="rounded-circle" src="img/santi.jpg" alt="Santiago Camp Estrada" style={{width: '30px', height: '30px'}} />
-                                    </td>
-                                    <td>
-                                    <a href="trabajador.html">Santiago Camp Estrada</a>
-                                    </td>
-                                    <td>01 de Enero de 2021</td>
-                                    <td>100 horas</td>
-                                    <td>
-                                    <a href="trabajador.html" className="btn btn-success btn-sm">
-                                    <i className="fa fa-eye"></i>
-                                    </a>
-                                    <button className="btn btn-danger btn-sm">
-                                    <i className="fa fa-trash"></i>
-                                    </button>
-                                    </td>
-                                </tr>
+                                {
+                                    trabajadores.map(({id, nombre, nombreLargo}, index) => {
+                                        return (
+                                            <tr key={index}>
+                                                <td>{index}</td>
+                                                <td>
+                                                    <i className="fas fa-check-circle" style={{color: '#1cc88a'}}></i>
+                                                    <i className="fas fa-times-circle"></i>
+                                                </td>
+                                                <td>{nombre}</td>
+                                                <td>12 de Septiembre de 2021</td>
+                                                <td> - </td>
+                                                <td>
+                                                    <button className="btn btn-success btn-sm"><i className="fa fa-eye"></i></button>
+                                                    <button className="btn btn-danger btn-sm"><i className="fa fa-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                        )
+                                    })
+                                }
                             </tbody>
                         </table>
                         </div>

@@ -34,24 +34,24 @@ const Menu = () => {
           // Close any open menu accordions when window is resized below 768px
           $(window).resize(function() {
               if ($(window).width() < 768) {
-              $('.sidebar .collapse').collapse('hide');
+                $('.sidebar .collapse').collapse('hide');
               };
               
               // Toggle the side navigation when window is resized below 480px
               if ($(window).width() < 480 && !$(".sidebar").hasClass("toggled")) {
-              $("body").addClass("sidebar-toggled");
-              $(".sidebar").addClass("toggled");
-              $('.sidebar .collapse').collapse('hide');
+                $("body").addClass("sidebar-toggled");
+                $(".sidebar").addClass("toggled");
+                $('.sidebar .collapse').collapse('hide');
               };
           });
           
           // Prevent the content wrapper from scrolling when the fixed side navigation hovered over
           $('body.fixed-nav .sidebar').on('mousewheel DOMMouseScroll wheel', function(e) {
               if ($(window).width() > 768) {
-              var e0 = e.originalEvent,
-                  delta = e0.wheelDelta || -e0.detail;
-              this.scrollTop += (delta < 0 ? 1 : -1) * 30;
-              e.preventDefault();
+                var e0 = e.originalEvent,
+                    delta = e0.wheelDelta || -e0.detail;
+                this.scrollTop += (delta < 0 ? 1 : -1) * 30;
+                e.preventDefault();
               }
           });
           
@@ -59,9 +59,9 @@ const Menu = () => {
           $(document).on('scroll', function() {
               var scrollDistance = $(this).scrollTop();
               if (scrollDistance > 100) {
-              $('.scroll-to-top').fadeIn();
+                $('.scroll-to-top').fadeIn();
               } else {
-              $('.scroll-to-top').fadeOut();
+                $('.scroll-to-top').fadeOut();
               }
           });
           
@@ -88,7 +88,7 @@ const Menu = () => {
                 </a>
                 <hr className="sidebar-divider my-0" />
                 <li className="nav-item">
-                    <NavLink exact activeClassName="active" className="non-active nav-link" to="/"><i className="fas fa-fw fa-tachometer-alt"></i> <span>Panel de control</span></NavLink>
+                    <NavLink exact activeClassName="active" className="non-active nav-link" to="/FichajePorVoz/panel-de-control"><i className="fa fa-tachometer"></i> <span>Panel de control</span></NavLink>
                 </li>
                 <hr className="sidebar-divider" />
                 <div className="sidebar-heading">
@@ -97,31 +97,28 @@ const Menu = () => {
                 <li className="nav-item">
                     <a className="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTrabajadores"
                         aria-expanded="false" aria-controls="collapseTrabajadores">
-                        <i className="fas fa-fw fa-users"></i>
+                        <i className="fa fa-users"></i>
                         <span>Trabajadores</span>
                     </a>
                     <div id="collapseTrabajadores" className="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div className="bg-white py-2 collapse-inner rounded">
-                            <NavLink exact activeClassName="active" className="non-active collapse-item" to="/trabajadores">Todos los trabajadores</NavLink>
-                            <NavLink exact activeClassName="active" className="non-active collapse-item" to="/nuevo-trabajador">Añadir Trabajador</NavLink>
+                            <NavLink exact activeClassName="active" className="non-active collapse-item" to="/FichajePorVoz/trabajadores">Todos los trabajadores</NavLink>
+                            <NavLink exact activeClassName="active" className="non-active collapse-item" to="/FichajePorVoz/nuevo-trabajador">Añadir Trabajador</NavLink>
                         </div>
                     </div>
                 </li>
                 <li className="nav-item">
-                    <NavLink exact activeClassName="active" className="non-active nav-link" to="/fichajes"><i className="fas fa-microphone"></i> <span>Fichajes</span></NavLink>
+                    <NavLink exact activeClassName="active" className="non-active nav-link" to="/FichajePorVoz/fichajes"><i className="fa fa-microphone"></i> <span>Fichajes</span></NavLink>
                 </li>
                 <li className="nav-item">
-                    <NavLink exact activeClassName="active" className="non-active nav-link" to="/calendario-laboral"><i className="fas fa-calendar-alt"></i> <span>Calendario laboral</span></NavLink>
+                    <NavLink exact activeClassName="active" className="non-active nav-link" to="/FichajePorVoz/calendario-laboral"><i className="fa fa-calendar"></i> <span>Calendario laboral</span></NavLink>
                 </li>
                 <hr className="sidebar-divider" />
                 <div className="sidebar-heading">
                     OTROS
                 </div>
                 <li className="nav-item">
-                    <NavLink exact activeClassName="active" className="non-active nav-link" to="/informes"><i className="fas fa-chart-line"></i> <span>Informes</span></NavLink>
-                </li>
-                <li className="nav-item">
-                    <NavLink exact activeClassName="active" className="non-active nav-link" to="/"><i className="fas fa-fw fa-cog"></i> <span>Configuración</span></NavLink>
+                    <NavLink exact activeClassName="active" className="non-active nav-link" to="/FichajePorVoz/informes"><i className="fa fa-line-chart"></i> <span>Informes</span></NavLink>
                 </li>
                 <hr className="sidebar-divider d-none d-md-block" />
                 <div className="text-center d-none d-md-inline">
@@ -130,14 +127,15 @@ const Menu = () => {
             </ul>
             
             <Switch>
-                <Route exact path="/trabajadores" component={TodosLosTrabajadores} />
-                <Route exact path="/nuevo-trabajador" component={AddTrabajador} />
-                <Route exact path="/fichajes" component={Fichajes} />
-                <Route exact path="/calendario-laboral" component={CalendarioLaboral} />
-                <Route exact path="/informes" component={Informes} />
-                <Route exact path="/registrarse" component={Register} />
-                <Route exact path="/iniciar-sesion" component={Login} />
-                <Route exact path="/perfil" component={Perfil} />
+                <Route exact path="/FichajePorVoz/trabajadores" component={TodosLosTrabajadores} />
+                <Route exact path="/FichajePorVoz/nuevo-trabajador" component={AddTrabajador} />
+                <Route exact path="/FichajePorVoz/fichajes" component={Fichajes} />
+                <Route exact path="/FichajePorVoz/calendario-laboral" component={CalendarioLaboral} />
+                <Route exact path="/FichajePorVoz/informes" component={Informes} />
+                <Route exact path="/FichajePorVoz/registrarse" component={Register} />
+                <Route exact path="/FichajePorVoz/iniciar-sesion" component={Login} />
+                <Route exact path="/FichajePorVoz/perfil" component={Perfil} />
+                <Route exact path="/FichajePorVoz/panel-de-control" component={PanelDeControl} />
                 <Route path="/" component={PanelDeControl} />
             </Switch> 
         </Router>
