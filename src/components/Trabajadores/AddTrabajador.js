@@ -1,8 +1,57 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 import Topbar from '../Topbar/Topbar';
-import Footer from '../Footer/Footer'
+import Footer from '../Footer/Footer';
+import { cookies } from '../../helpers/cookies';
 
-const AddTrabajador = () => {
+const AddTrabajador = (props) => {
+    const [datos, setDatos] = useState({
+        nombre: '',
+        primerApellido: '',
+        segundoApellido: '',
+        email: '',
+        genero: '',
+        dni: '',
+        telefono: '',
+        movil: '',
+        nacimiento: '',
+        direccion: '',
+        fechaAlta: '',
+        cargo: '',
+        informacionComplementaria: '',
+        administrador: false,
+        imagen: '',
+        empresa: cookies.get('empresa'),
+    });
+    const handleOnChange = (e) => {
+        setDatos({
+            ...datos,
+            [e.target.name]: e.target.value,
+        });
+        console.log(datos);
+    }
+    const handleCheckboxChage = (e) => {
+        setDatos({
+            ...datos,
+            administrador: e.target.checked,
+        });
+    }
+    const nuevaImagen = (e) => {
+        let reader = new FileReader();
+        let file = e.target.files[0];
+        reader.onload = (upload) => {
+            setDatos({
+                ...datos,
+                imagen: upload.target.result,
+            })
+        }
+        reader.readAsDataURL(file);
+    }
+    const nuevoTrabajador = async (e) => {
+        e.preventDefault();
+        await axios.post('http://54.74.52.150:3030/nuevoTrabajador', datos);
+        props.history.push('/FichajePorVoz/trabajadores');
+    }
     return (
         <div id='content-wrapper' className='d-flex flex-column'>
         <div id='content'>
@@ -40,52 +89,65 @@ const AddTrabajador = () => {
                             <div className="row">
                                 <div className="col-md-4">
                                     <label for="nombre">Nombre</label>
-                                    <input type="text" className="form-control" id="nombre" placeholder="Nombre" />
+                                    <input type="text" className="form-control" id="nombre" placeholder="Nombre" name='nombre' onChange={handleOnChange} />
                                 </div>
                                 <div className="col-md-4">
                                     <label for="apellido1">Primer Apellido</label>
-                                    <input type="text" className="form-control" id="apellido1" placeholder="Primer Apellido" />
+                                    <input type="text" className="form-control" id="apellido1" placeholder="Primer Apellido" name='primerApellido' onChange={handleOnChange} />
                                 </div>
                                 <div className="col-md-4">
                                     <label for="apellido2">Segundo Apellido</label>
-                                    <input type="text" className="form-control" id="apellido2" placeholder="Segundo Apellido" />
+                                    <input type="text" className="form-control" id="apellido2" placeholder="Segundo Apellido" name='segundoApellido' onChange={handleOnChange} />
                                 </div>
                             </div>
                             <br />
                             <div className="row">
                                 <div className="col-md-4">
                                     <label for="email">Correo Electrónico</label>
-                                    <input type="email" className="form-control" id="email" placeholder="email" />
+                                    <input type="email" className="form-control" id="email" placeholder="Email" name='email' onChange={handleOnChange} />
+                                </div>
+                                <div className='col-md-4'>
+                                    <label for='genero'>Género</label>
+                                    <select className='form-control' id='genero' name='genero' onChange={handleOnChange}>
+                                        <option></option>
+                                        <option value='femenino'>Femenino</option>
+                                        <option value='masculino'>Masculino</option>
+                                        <option value='no_binario'>No binario</option>
+                                    </select>
+                                </div>
+                                <div className='col-md-4'>
+                                    <label for='dni'>DNI</label>
+                                    <input type='text' className='form-control' id='dni' placeholder='DNI' name='dni' onChange={handleOnChange} />
                                 </div>
                             </div>
                             <br />
                             <div className="row">
                                 <div className="col-md-2">
                                     <label for="telf">Teléfono</label>
-                                    <input type="text" className="form-control" id="telf" placeholder="Teléfono" />
+                                    <input type="text" className="form-control" id="telf" placeholder="Teléfono" name='telefono' onChange={handleOnChange} />
                                 </div>
                                 <div className="col-md-2">
                                     <label for="mbl">Móvil</label>
-                                    <input type="text" className="form-control" id="mbl" placeholder="Móvil" />
+                                    <input type="text" className="form-control" id="mbl" placeholder="Móvil" name='movil' onChange={handleOnChange} />
                                 </div>
                                 <div className="col-md-2">
                                     <label for="cumple">Nacido el</label>
-                                    <input type="date" className="form-control" id="cumple" placeholder="Fecha de nacimiento" />
+                                    <input type="date" className="form-control" id="cumple" placeholder="Fecha de nacimiento" name='nacimiento' onChange={handleOnChange} />
                                 </div>
                                 <div className="col-md-6">
                                     <label for="dir">Dirección</label>
-                                    <input type="text" className="form-control" id="dir" placeholder="Dirección" />
+                                    <input type="text" className="form-control" id="dir" placeholder="Dirección" name='direccion' onChange={handleOnChange} />
                                 </div>
                             </div>
                             <br />
                             <div className="row">
                                 <div className="col-md-2">
                                     <label for="alta">Fecha de Alta</label>
-                                    <input type="date" className="form-control" id="alta" placeholder="alta" value="2021-02-01" />
+                                    <input type="date" className="form-control" id="alta" placeholder="alta" name='fechaAlta' onChange={handleOnChange} />
                                 </div>
                                 <div className="col-md-10">
                                     <label for="cargo">Cargo</label>
-                                    <input type="text" className="form-control" id="cargo" placeholder="cargo" />
+                                    <input type="text" className="form-control" id="cargo" placeholder="Cargo" name='cargo' onChange={handleOnChange} />
                                 </div>
                             </div>
                             <br />
@@ -93,20 +155,20 @@ const AddTrabajador = () => {
                                 <div className="col-md-12">
                                     <div className="form-group">
                                     <label for="extra">Información Complementaria</label>
-                                    <textarea className="form-control" id="extra" rows="3"></textarea>
+                                    <textarea className="form-control" id="extra" rows="3" name='informacionComplementaria' onChange={handleOnChange} ></textarea>
                                     </div>
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="col-12">
                                     <div className="form-group form-check">
-                                    <input type="checkbox" className="form-check-input" id="isadmin" />
-                                    <label className="form-check-label" for="isadmin">Trabajador Administrador</label>
+                                        <input type="checkbox" className="form-check-input" id="isadmin" name='administrador' onChange={handleCheckboxChage} />
+                                        <label className="form-check-label" for="isadmin">Trabajador Administrador</label>
                                     </div>
                                 </div>
                             </div>
                             <input type="hidden" name="photo" id="hidden-photo" />
-                            <button type="submit" className="btn btn-primary">Guardar</button>
+                            <button type="submit" className="btn btn-primary" onClick={nuevoTrabajador}>Guardar</button>
                         </form>
                         </div>
                     </div>
