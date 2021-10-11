@@ -16,14 +16,14 @@ const CalendarModal = ({updateEvents}) => {
         idTrabajador: ''        
     });
     useEffect(() => {
-      axios.get(`http://54.74.52.150:3030/users?empresa=${cookies.get('empresa')}`).then((data) => {
+      axios.get(`http://localhost:3030/users?empresa=${cookies.get('empresa')}`).then((data) => {
           setTrabajadores(data.data);
       });
     }, [])
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const handleOnClick = () => {
-      axios.post('http://54.74.52.150:3030/nuevoEventoCalendario', data).then((data) => {
+      axios.post('http://localhost:3030/nuevoEventoCalendario', data).then((data) => {
         updateEvents();
       });
       setShow(false);

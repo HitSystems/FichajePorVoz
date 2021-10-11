@@ -12,52 +12,52 @@ const Login = () => {
     }, []);
     return (
         <>
-        <div class="container">
+        <div className="container">
 
-        <div class="row justify-content-center">
+        <div className="row justify-content-center">
 
-            <a href="#" class="logo-login">
+            <span className="logo-login">
                 <img src={logo} alt="" />
-            </a>
+            </span>
 
-            <h2 class="text-center" style={{fontSize: '25px', fontWeight: 'normal'}}>La solución más eficiente para los fichajes de <b>tu empresa</b></h2>
+            <h2 className="text-center" style={{fontSize: '25px', fontWeight: 'normal'}}>La solución más eficiente para los fichajes de <b>tu empresa</b></h2>
 
-            <div class="col-xl-10 col-lg-12 col-md-9">
+            <div className="col-xl-10 col-lg-12 col-md-9">
 
-                <div class="card o-hidden border-0 shadow-lg my-5 card-login">
-                    <div class="card-body p-0">
-                        <div class="row">
-                            <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
-                            <div class="col-lg-6">
-                                <div class="p-5">
-                                    <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-4">Bienvenido de nuevo</h1>
+                <div className="card o-hidden border-0 shadow-lg my-5 card-login">
+                    <div className="card-body p-0">
+                        <div className="row">
+                            <div className="col-lg-6 d-none d-lg-block bg-login-image"></div>
+                            <div className="col-lg-6">
+                                <div className="p-5">
+                                    <div className="text-center">
+                                        <h1 className="h4 text-gray-900 mb-4">Bienvenido de nuevo</h1>
                                     </div>
-                                    <form class="user">
-                                        <div class="form-group">
-                                            <input type="email" class="form-control form-control-user"
+                                    <form className="user">
+                                        <div className="form-group">
+                                            <input type="email" className="form-control form-control-user"
                                                 id="exampleInputEmail" aria-describedby="emailHelp"
                                                 placeholder="Email" autocomplete="off" />
                                         </div>
-                                        <div class="form-group">
-                                            <input type="password" class="form-control form-control-user"
+                                        <div className="form-group">
+                                            <input type="password" className="form-control form-control-user"
                                                 id="exampleInputPassword" placeholder="Contraseña" autocomplete="off" />
                                         </div>
-                                        <div class="form-group">
-                                            <div class="custom-control custom-checkbox small">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck" />
-                                                <label class="custom-control-label" for="customCheck">Recordarme</label>
+                                        <div className="form-group">
+                                            <div className="custom-control custom-checkbox small">
+                                                <input type="checkbox" className="custom-control-input" id="customCheck" />
+                                                <label className="custom-control-label" for="customCheck">Recordarme</label>
                                             </div>
                                         </div>
-                                        <a href="panel-de-control.html" class="btn btn-primary btn-user btn-block btn-login">
+                                        <a href="panel-de-control.html" className="btn btn-primary btn-user btn-block btn-login">
                                             Entrar
                                         </a>
                                         <hr />
-                                        <a href="#" class="btn btn-google btn-block btn-user"><i class="fab fa-google fa-fw"></i> Google</a>
+                                        <a href="#" className="btn btn-google btn-block btn-user"><i className="fab fa-google fa-fw"></i> Google</a>
                                     </form>
                                     <hr />
-                                    <div class="text-center">
-                                        <a class="small" href="recordar-contrasena.html">¿Has olvidado tu contraseña?</a>
+                                    <div className="text-center">
+                                        <a className="small" href="recordar-contrasena.html">¿Has olvidado tu contraseña?</a>
                                     </div>
                                 </div>
                             </div>
@@ -71,11 +71,11 @@ const Login = () => {
 
     </div>
 
-    <footer class="sticky-footer">
-        <div class="container my-auto">
-            <div class="copyright text-center my-auto">
+    <footer className="sticky-footer">
+        <div className="container my-auto">
+            <div className="copyright text-center my-auto">
                 <span>&copy; 2020 - <a href="#">Fichajeporvoz.com</a> - Todos los derechos reservados</span>
-                <span class="copy-grafix">
+                <span className="copy-grafix">
                     Desarrollado por <a href="https://grafix.es/" target="_blank">Grafix</a>
                 </span>
             </div>

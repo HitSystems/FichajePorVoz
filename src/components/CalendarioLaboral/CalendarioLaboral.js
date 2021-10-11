@@ -12,20 +12,20 @@ const CalendarioLaboral = () => {
         console.log('Click en el dia');
     }
     useEffect(() => {
-        axios.get(`http://54.74.52.150:3030/eventosCalendario?empresa=${cookies.get('empresa')}&idTrabajador=0`).then((data) => {
+        axios.get(`http://localhost:3030/eventosCalendario?empresa=${cookies.get('empresa')}&idTrabajador=0`).then((data) => {
             setEvents(data.data);
         });
-        axios.get(`http://54.74.52.150:3030/users?empresa=${cookies.get('empresa')}`).then((data) => {
+        axios.get(`http://localhost:3030/users?empresa=${cookies.get('empresa')}`).then((data) => {
             setTrabajadores(data.data);
         });
     }, []);
     const handleOnChange = (e) => {
-        axios.get(`http://54.74.52.150:3030/eventosCalendario?empresa=${cookies.get('empresa')}&idTrabajador=${e.target.value}`).then((data) => {
+        axios.get(`http://localhost:3030/eventosCalendario?empresa=${cookies.get('empresa')}&idTrabajador=${e.target.value}`).then((data) => {
             setEvents(data.data);
         });
     }
     const updateEvents = () => {
-        axios.get(`http://54.74.52.150:3030/eventosCalendario?empresa=${cookies.get('empresa')}&idTrabajador=0`).then((data) => {
+        axios.get(`http://localhost:3030/eventosCalendario?empresa=${cookies.get('empresa')}&idTrabajador=0`).then((data) => {
             setEvents(data.data);
         });
     }

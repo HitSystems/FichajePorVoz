@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
+import { dia, mes, year } from '../../helpers/fechas';
 import { cookies } from '../../helpers/cookies';
 import Footer from '../Footer/Footer';
 import Topbar from '../Topbar/Topbar';
@@ -9,20 +10,30 @@ const Fichajes = () => {
     const [fichajes, setFichajes] = useState([]);
     const [datosConsulta, setDatosConsulta] = useState({
         trabajador: 0,
-        year: 2021,
-        mes: 9,
+        year,
+        mes,
         franjaHoraria: 0
+    });
+    const [localizacion, setLocalizacion] = useState([]);
+    const [lat, setLat] = useState(null);
+    const [lng, setLng] = useState(null);
+    const [status, setStatus] = useState(null);
+    const [tiempo, setTiempo] = useState({
+        hora: '',
+        minutos: '',
     })
-
     useEffect(() => {
-        axios.get(`http://54.74.52.150:3030/users?empresa=${cookies.get('empresa')}`).then((data) => {
+        axios.get(`http://localhost:3030/users?empresa=${cookies.get('empresa')}`).then((data) => {
             setTrabajadores(data.data);
         });
         let {trabajador, year, mes, franjaHoraria} = datosConsulta;
-        let urlFichajes = `http://54.74.52.150:3030/fichajes?empresa=${cookies.get('empresa')}&trabajador=${trabajador}&year=${year}&mes=${mes}&franjaHoraria=${franjaHoraria}`;
+        let urlFichajes = `http://localhost:3030/fichajes?empresa=${cookies.get('empresa')}&trabajador=${trabajador}&year=${year}&mes=${mes}&franjaHoraria=${franjaHoraria}`;
         axios.get(urlFichajes).then((data) => {
             setFichajes(data.data);
         });
+        axios.get('https://geolocation-db.com/json/').then((data) => {
+            setLocalizacion(data.data);
+        })
     }, []);
 
     const handleOnChange = (e) => {
@@ -34,12 +45,35 @@ const Fichajes = () => {
     const handleOnClick = (e) => {
         e.preventDefault();
         let {trabajador, year, mes, franjaHoraria} = datosConsulta;
-        let urlFichajes = `http://54.74.52.150:3030/fichajes?empresa=${cookies.get('empresa')}&trabajador=${trabajador}&year=${year}&mes=${mes}&franjaHoraria=${franjaHoraria}`;
+        let urlFichajes = `http://localhost:3030/fichajes?empresa=${cookies.get('empresa')}&trabajador=${trabajador}&year=${year}&mes=${mes}&franjaHoraria=${franjaHoraria}`;
         axios.get(urlFichajes).then((data) => {
             setFichajes(data.data);
         });
     }
-
+    const getLocation = () => {
+        let hora, minutos, d = new Date();
+        hora = (d.getHours()).toString();
+        minutos = (d.getMinutes()).toString();
+        if(hora.length < 2) hora = `0${hora}`;
+        if(minutos.length < 2) minutos = `0${minutos}`;
+        setTiempo({
+            ...tiempo,
+            hora,
+            minutos,
+        });
+        if (!navigator.geolocation) {
+            setStatus('Tu navegador no soporta la geolocalización.');
+        } else {
+            setStatus('Cargando...');
+            navigator.geolocation.getCurrentPosition((position) => {
+                setStatus(null);
+                setLat(position.coords.latitude);
+                setLng(position.coords.longitude);
+            }, () => {
+                setStatus('Tienes que dar permisos al navegador para poder acceder a tu ubicación.');
+            });
+        }
+    }
     return (
         <div id="content-wrapper" class="d-flex flex-column">
         <div id='content'>
@@ -47,11 +81,11 @@ const Fichajes = () => {
          <div className="container-fluid">
         <div className="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 className="h3 mb-1 text-gray-800 title-section"><i className="fas fa-microphone"></i> Fichajes</h1>
-            <a href="#" className="btn btn-primary btn-icon-split btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#modalFichar">
+            <a href="'" className="btn btn-primary btn-icon-split btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#modalFichar">
             <span className="icon text-white-50">
             <i className="fas fa-plus"></i>
             </span>
-            <span className="text">Fichar Ahora</span>
+            <span className="text" onClick={getLocation}>Fichar Ahora</span>
             </a>
         </div>
         <div className="card shadow">
@@ -74,7 +108,7 @@ const Fichajes = () => {
                         </div>
                         <div className="col-md-2">
                             <div className="form-group">
-                                <select className="form-control" name='year' onChange={handleOnChange}>
+                                <select className="form-control" name='year' onChange={handleOnChange} value={datosConsulta.year}>
                                 <option value='2021'>2021</option>
                                 <option value='2020'>2020</option>
                                 <option value='2019'>2019</option>
@@ -85,7 +119,7 @@ const Fichajes = () => {
                         </div>
                         <div className="col-md-2">
                             <div className="form-group">
-                                <select className="form-control" name='mes' onChange={handleOnChange}>
+                                <select className="form-control" name='mes' onChange={handleOnChange} value={datosConsulta.mes}>
                                 <option value='1'>Enero</option>
                                 <option value='2'>Febrero</option>
                                 <option value='3'>Marzo</option>
@@ -117,9 +151,9 @@ const Fichajes = () => {
                             <button type="submit" className="btn btn-primary btn-sm" onClick={handleOnClick}>
                             <i className="fas fa-filter"></i>
                             </button>
-                            <a href="#" className="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Descargar CSV">
+                            <button className="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Descargar CSV">
                             <i className="fas fa-cloud-download-alt"></i>
-                            </a>
+                            </button>
                         </div>
                     </div>
                     </form>
@@ -184,31 +218,61 @@ const Fichajes = () => {
                     <div className="modal-body">
                     <ul className="list-group list-group-flush">
                         <li className="list-group-item">
-                            <b>De:</b> Santiago Camp Estrada
+                            <b>De:</b> {cookies.get('nombre')}
                         </li>
                         <li className="list-group-item">
-                            <b>Fecha:</b> <span className="get-day"></span>
+                            <b>Fecha: </b> <span className="get-day">{dia}/{mes}/{year}</span>
                         </li>
                         <li className="list-group-item">
-                            <b>Hora:</b> <span className="get-hour"></span>
+                            <b>Hora:</b> <span className="get-hour">{tiempo.hora}:{tiempo.minutos}</span>
                         </li>
                         <li className="list-group-item">
-                            <b>IP:</b> <span className="get-ip"></span>
+                            <b>IP:</b> <span className="get-ip">{localizacion.IPv4}</span>
                         </li>
                         <li className="list-group-item">
-                            <b>Localización:</b> Granollers
+                            <b>Localización:</b> {localizacion.city}
                         </li>
                         <li className="list-group-item item-map">
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d2983.2537597026353!2d2.2847613!3d41.607024!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDHCsDM2JzI1LjMiTiAywrAxNycxMy4wIkU!5e0!3m2!1ses!2ses!4v1626274915138!5m2!1ses!2ses" style={{border: 0, width: '100%', height: '200px'}} allowfullscreen="" loading="lazy"></iframe>
+                            {status === null ?
+                                <iframe src={`https://maps.google.com/maps?q=${lat},${lng}&hl=es&z=14&amp&output=embed`} style={{border: 0, width: '100%', height: '200px'}} allowfullscreen="" loading="lazy"></iframe>
+                                :
+                                <b>{status}</b>
+                            }
                         </li>
                         <li className="list-group-item text-center">
                             <br />
-                            <a href="#" className="btn btn-primary btn-icon-split btn-primary shadow-sm btn-lg">
-                            <span className="icon text-white-50">
-                            <i className="fas fa-check"></i>
-                            </span>
-                            <span className="text">FICHAR AHORA</span>
-                            </a>
+                            {cookies.get('accionUltimoFichaje') === '2' ? 
+                                <button className="btn btn-primary btn-icon-split shadow-sm btn-lg">
+                                    <span className="icon text-white-50">
+                                        <i className="fas fa-check"></i>
+                                    </span>
+                                    <span className="text">FICHAR AHORA</span>
+                                </button>
+                            :
+                                <button className="btn btn-success btn-icon-split shadow-sm btn-lg">
+                                    <span className="icon text-white-50">
+                                        <i className="fas fa-check"></i>
+                                    </span>
+                                    <span className="text">DESFICHAR AHORA</span>
+                                </button>
+                            }
+                            <br />
+                            <br />
+                            {cookies.get('accionUltimoDescanso') === '4' ? 
+                                <button className="btn btn-primary btn-icon-split shadow-sm btn-lg">
+                                    <span className="icon text-white-50">
+                                        <i className="fas fa-check"></i>
+                                    </span>
+                                    <span className="text">DESCANSO AHORA</span>
+                                </button>
+                            :
+                                <button className="btn btn-success btn-icon-split shadow-sm btn-lg">
+                                    <span className="icon text-white-50">
+                                        <i className="fas fa-check"></i>
+                                    </span>
+                                    <span className="text">FIN DESCANSO AHORA</span>
+                                </button>
+                            }
                         </li>
                     </ul>
                     <form>

@@ -15,17 +15,19 @@ const PanelDeControl = () => {
     cookies.set('nombre', 'Juan');
     cookies.set('mail', 'demohit@gmail.com');
     cookies.set('idUsuario', '2');
+    cookies.set('accionUltimoFichaje', '1');
+    cookies.set('accionUltimoDescanso', '4');
     const [userData, setUserData] = useState({
         totalTrabajadores: 0,
     });
     const [activos, setActivos] = useState([])
     useEffect(() => {
-        axios.get(`http://54.74.52.150:3030/totalTrabajadores?empresa=${cookies.get('empresa')}`).then((data) => {
+        axios.get(`http://localhost:3030/totalTrabajadores?empresa=${cookies.get('empresa')}`).then((data) => {
             setUserData({
                 totalTrabajadores: data.data.total-1
             })
         });
-        axios.get(`http://54.74.52.150:3030/trabajadoresActivos?empresa=${cookies.get('empresa')}`).then((data) => {
+        axios.get(`http://localhost:3030/trabajadoresActivos?empresa=${cookies.get('empresa')}`).then((data) => {
             let activos = [];
             for(let i in data.data) {
                 activos.push({

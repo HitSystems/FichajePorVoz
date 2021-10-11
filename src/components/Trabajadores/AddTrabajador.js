@@ -49,7 +49,7 @@ const AddTrabajador = (props) => {
     }
     const nuevoTrabajador = async (e) => {
         e.preventDefault();
-        await axios.post('http://54.74.52.150:3030/nuevoTrabajador', datos);
+        await axios.post('http://localhost:3030/nuevoTrabajador', datos);
         props.history.push('/FichajePorVoz/trabajadores');
     }
     return (
