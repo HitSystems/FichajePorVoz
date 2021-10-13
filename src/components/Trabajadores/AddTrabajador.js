@@ -3,6 +3,7 @@ import axios from 'axios';
 import Topbar from '../Topbar/Topbar';
 import Footer from '../Footer/Footer';
 import { cookies } from '../../helpers/cookies';
+import { socket } from '../../helpers/createSocket';
 
 const AddTrabajador = (props) => {
     const [datos, setDatos] = useState({
@@ -20,15 +21,14 @@ const AddTrabajador = (props) => {
         cargo: '',
         informacionComplementaria: '',
         administrador: false,
-        imagen: '',
         empresa: cookies.get('empresa'),
     });
+    const [imagen, setImagen] = useState('');
     const handleOnChange = (e) => {
         setDatos({
             ...datos,
             [e.target.name]: e.target.value,
         });
-        console.log(datos);
     }
     const handleCheckboxChage = (e) => {
         setDatos({
@@ -40,16 +40,23 @@ const AddTrabajador = (props) => {
         let reader = new FileReader();
         let file = e.target.files[0];
         reader.onload = (upload) => {
-            setDatos({
-                ...datos,
-                imagen: upload.target.result,
-            })
+            setImagen(upload.target.result);
         }
         reader.readAsDataURL(file);
     }
     const nuevoTrabajador = async (e) => {
         e.preventDefault();
-        await axios.post('http://localhost:3030/nuevoTrabajador', datos);
+        axios.post('http://localhost:3030/nuevoTrabajador', datos).then(({ data }) => {
+            const dataUsuario = {
+                id: data.id,
+                imagen: imagen,
+                empresa: cookies.get('empresa'),
+            }
+            socket.emit('imagenUsuario', dataUsuario);
+        });
+        if(imagen !== '') {
+
+        }
         props.history.push('/FichajePorVoz/trabajadores');
     }
     return (
@@ -70,7 +77,7 @@ const AddTrabajador = (props) => {
                                     <label className="button" for="upload">
                                     <i className="fas fa-camera-retro"></i>
                                     </label>
-                                    <input id="upload" type="file" accept="image/*" />
+                                    <input id="upload" type="file" accept="image/*" onChange={nuevaImagen} />
                                     </div>
                                 </div>
                             </div>

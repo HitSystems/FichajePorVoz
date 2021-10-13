@@ -26,16 +26,18 @@ const Fichajes = () => {
         axios.get(`http://localhost:3030/users?empresa=${cookies.get('empresa')}`).then((data) => {
             setTrabajadores(data.data);
         });
+        getFichajes();
+        axios.get('https://geolocation-db.com/json/').then((data) => {
+            setLocalizacion(data.data);
+        })
+    }, []);
+    const getFichajes = () => {
         let {trabajador, year, mes, franjaHoraria} = datosConsulta;
         let urlFichajes = `http://localhost:3030/fichajes?empresa=${cookies.get('empresa')}&trabajador=${trabajador}&year=${year}&mes=${mes}&franjaHoraria=${franjaHoraria}`;
         axios.get(urlFichajes).then((data) => {
             setFichajes(data.data);
         });
-        axios.get('https://geolocation-db.com/json/').then((data) => {
-            setLocalizacion(data.data);
-        })
-    }, []);
-
+    }
     const handleOnChange = (e) => {
         setDatosConsulta({
             ...datosConsulta,
@@ -73,6 +75,23 @@ const Fichajes = () => {
                 setStatus('Tienes que dar permisos al navegador para poder acceder a tu ubicación.');
             });
         }
+    }
+    const accionFichaje = (e) => {
+        e.preventDefault();
+        const dataAccion = {
+            empresa: cookies.get('empresa'),
+            idTrabajador: cookies.get('idUsuario'),
+            accion: e.target.id,
+            lat: lat,
+            lon: lng,
+        }
+        axios.post('http://localhost:3030/fichar', dataAccion).then((data) => {
+            cookies.remove('accionUltimoFichaje', {path:  '/'});
+            cookies.remove('accionUltimoDescanso', {path:  '/'});
+            cookies.set('accionUltimoFichaje', data.data.accionUltimoFichaje);
+            cookies.set('accionUltimoDescanso', data.data.accionUltimoDescanso);
+        });
+        getFichajes();
     }
     return (
         <div id="content-wrapper" class="d-flex flex-column">
@@ -175,7 +194,7 @@ const Fichajes = () => {
                     <tbody>
                         {
                             fichajes.map(({fecha, hora, accio, nom}, index) => {
-                                let accioNombre = accio === 1 ? 'Entrada' : 'Salida';
+                                let accioNombre = accio === 1 ? 'Entrada' : accio === 2 ? 'Salida' : accio === 3 ? 'Inicio descanso' : 'Fin descanso';
                                 return (
                                     <tr key={index}>
                                         <td>{index}</td>
@@ -189,7 +208,7 @@ const Fichajes = () => {
                                         <td>{accioNombre}</td>
                                         <td></td>
                                         <td>
-                                            <a href="#" className="btn btn-success btn-icon-split btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#modalEdit">
+                                            <a href="'" className="btn btn-success btn-icon-split btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#modalEdit">
                                             <span className="icon text-white-50">
                                             <i className="fas fa-pencil-alt"></i>
                                             </span>
@@ -242,35 +261,35 @@ const Fichajes = () => {
                         <li className="list-group-item text-center">
                             <br />
                             {cookies.get('accionUltimoFichaje') === '2' ? 
-                                <button className="btn btn-primary btn-icon-split shadow-sm btn-lg">
+                                <button className="btn btn-primary btn-icon-split shadow-sm btn-lg" data-dismiss="modal" name='1' onClick={accionFichaje}>
                                     <span className="icon text-white-50">
                                         <i className="fas fa-check"></i>
                                     </span>
-                                    <span className="text">FICHAR AHORA</span>
+                                    <span className="text" id='1'>FICHAR AHORA</span>
                                 </button>
                             :
-                                <button className="btn btn-success btn-icon-split shadow-sm btn-lg">
+                                <button className="btn btn-success btn-icon-split shadow-sm btn-lg" data-dismiss="modal" name='2' onClick={accionFichaje}>
                                     <span className="icon text-white-50">
                                         <i className="fas fa-check"></i>
                                     </span>
-                                    <span className="text">DESFICHAR AHORA</span>
+                                    <span className="text" id='2'>DESFICHAR AHORA</span>
                                 </button>
                             }
                             <br />
                             <br />
                             {cookies.get('accionUltimoDescanso') === '4' ? 
-                                <button className="btn btn-primary btn-icon-split shadow-sm btn-lg">
+                                <button className="btn btn-primary btn-icon-split shadow-sm btn-lg" data-dismiss="modal" name='3' onClick={accionFichaje}>
                                     <span className="icon text-white-50">
                                         <i className="fas fa-check"></i>
                                     </span>
-                                    <span className="text">DESCANSO AHORA</span>
+                                    <span className="text" id='3'>DESCANSO AHORA</span>
                                 </button>
                             :
-                                <button className="btn btn-success btn-icon-split shadow-sm btn-lg">
+                                <button className="btn btn-success btn-icon-split shadow-sm btn-lg" data-dismiss="modal" name='4' onClick={accionFichaje}>
                                     <span className="icon text-white-50">
                                         <i className="fas fa-check"></i>
                                     </span>
-                                    <span className="text">FIN DESCANSO AHORA</span>
+                                    <span className="text" id='4'>FIN DESCANSO AHORA</span>
                                 </button>
                             }
                         </li>

@@ -14,7 +14,8 @@ const Perfil = () => {
             setDatosTrabajador({
                 telefono: '',
                 movil: data.data.movil,
-                direccion: data.data.direccion
+                direccion: data.data.direccion,
+                imagen: data.data.imagen,
             })
         })
     }, [])
@@ -32,7 +33,7 @@ const Perfil = () => {
                         <div className="card-body">
                             <div className="text-center">
                                 <div className="img-pr-w">
-                                    <img className="img-profile img-trabajador rounded-circle" src="https://media-exp3.licdn.com/dms/image/C4D0BAQHmN_j9JghpIA/company-logo_200_200/0/1591341525462?e=2159024400&v=beta&t=qruY0BBlI1LtzqfcOo9UOtJNKITx_0Rc9wJY8RhC-Og" alt="Grafix" />
+                                    <img className="img-profile img-trabajador rounded-circle" src={datosTrabajador.imagen} alt="Grafix" />
                                     <div className="container-file btn btn-primary rounded-circle btn-edit-photo container-file-edit" data-toggle="tooltip" data-placement="top" title="Cambiar Foto">
                                         <div className="button-wrap">
                                             <label className="button" for="upload">
