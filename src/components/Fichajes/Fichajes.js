@@ -93,6 +93,23 @@ const Fichajes = () => {
         });
         getFichajes();
     }
+    const descargarFichajes = (e) => {
+        e.preventDefault();
+        const element = document.createElement("a");
+        const fichajesValues = getValuesFichajes();
+        const file = new Blob([JSON.stringify(fichajesValues)], {type: 'text/plain'});
+        element.href = URL.createObjectURL(file);
+        element.download = "myFile.txt";
+        document.body.appendChild(element); // Required for this to work in FireFox
+        element.click();
+    }
+    const getValuesFichajes = () => {
+        let values = '';
+        for(let i = 0; i < fichajes.length; i++) {
+            values += fichajes[i].fecha + ' ' + fichajes[i].nom + ' ' + fichajes[i].accio;
+        }
+        return values;
+    }
     return (
         <div id="content-wrapper" class="d-flex flex-column">
         <div id='content'>
@@ -170,7 +187,7 @@ const Fichajes = () => {
                             <button type="submit" className="btn btn-primary btn-sm" onClick={handleOnClick}>
                             <i className="fas fa-filter"></i>
                             </button>
-                            <button className="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Descargar CSV">
+                            <button className="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Descargar CSV" onClick={descargarFichajes}>
                             <i className="fas fa-cloud-download-alt"></i>
                             </button>
                         </div>
