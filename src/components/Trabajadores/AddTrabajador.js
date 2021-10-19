@@ -46,17 +46,16 @@ const AddTrabajador = (props) => {
     }
     const nuevoTrabajador = async (e) => {
         e.preventDefault();
-        axios.post('http://localhost:3030/nuevoTrabajador', datos).then(({ data }) => {
+        axios.post('/nuevoTrabajador', datos).then(({ data }) => {
             const dataUsuario = {
                 id: data.id,
                 imagen: imagen,
                 empresa: cookies.get('empresa'),
             }
-            socket.emit('imagenUsuario', dataUsuario);
+            if(imagen !== '') {
+                socket.emit('imagenUsuario', dataUsuario);
+            }
         });
-        if(imagen !== '') {
-
-        }
         props.history.push('/FichajePorVoz/trabajadores');
     }
     return (

@@ -7,7 +7,7 @@ import { cookies } from '../../helpers/cookies';
 const TodosLosTrabajadores = () => {
     const [trabajadores, setTrabajadores] = useState([]);
     useEffect(() => {
-        axios.get(`http://localhost:3030/users?empresa=${cookies.get('empresa')}`).then((data) => {
+        axios.get(`/users?empresa=${cookies.get('empresa')}`).then((data) => {
             setTrabajadores(data.data);
         });
     }, [])

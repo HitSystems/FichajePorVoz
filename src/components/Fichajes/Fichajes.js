@@ -23,7 +23,7 @@ const Fichajes = () => {
         minutos: '',
     })
     useEffect(() => {
-        axios.get(`http://localhost:3030/users?empresa=${cookies.get('empresa')}`).then((data) => {
+        axios.get(`/users?empresa=${cookies.get('empresa')}`).then((data) => {
             setTrabajadores(data.data);
         });
         getFichajes();
@@ -33,7 +33,7 @@ const Fichajes = () => {
     }, []);
     const getFichajes = () => {
         let {trabajador, year, mes, franjaHoraria} = datosConsulta;
-        let urlFichajes = `http://localhost:3030/fichajes?empresa=${cookies.get('empresa')}&trabajador=${trabajador}&year=${year}&mes=${mes}&franjaHoraria=${franjaHoraria}`;
+        let urlFichajes = `/fichajes?empresa=${cookies.get('empresa')}&trabajador=${trabajador}&year=${year}&mes=${mes}&franjaHoraria=${franjaHoraria}`;
         axios.get(urlFichajes).then((data) => {
             setFichajes(data.data);
         });
@@ -47,7 +47,7 @@ const Fichajes = () => {
     const handleOnClick = (e) => {
         e.preventDefault();
         let {trabajador, year, mes, franjaHoraria} = datosConsulta;
-        let urlFichajes = `http://localhost:3030/fichajes?empresa=${cookies.get('empresa')}&trabajador=${trabajador}&year=${year}&mes=${mes}&franjaHoraria=${franjaHoraria}`;
+        let urlFichajes = `/fichajes?empresa=${cookies.get('empresa')}&trabajador=${trabajador}&year=${year}&mes=${mes}&franjaHoraria=${franjaHoraria}`;
         axios.get(urlFichajes).then((data) => {
             setFichajes(data.data);
         });
@@ -85,7 +85,7 @@ const Fichajes = () => {
             lat: lat,
             lon: lng,
         }
-        axios.post('http://localhost:3030/fichar', dataAccion).then((data) => {
+        axios.post('/fichar', dataAccion).then((data) => {
             cookies.remove('accionUltimoFichaje', {path:  '/'});
             cookies.remove('accionUltimoDescanso', {path:  '/'});
             cookies.set('accionUltimoFichaje', data.data.accionUltimoFichaje);
@@ -96,17 +96,17 @@ const Fichajes = () => {
     const descargarFichajes = (e) => {
         e.preventDefault();
         const element = document.createElement("a");
-        const fichajesValues = getValuesFichajes();
-        const file = new Blob([JSON.stringify(fichajesValues)], {type: 'text/plain'});
+        const fichajesValues = encodeURIComponent(getValuesFichajes());
+        const file = new Blob([JSON.stringify(fichajesValues)]);
         element.href = URL.createObjectURL(file);
-        element.download = "myFile.txt";
+        element.download = "fichajes.txt";
         document.body.appendChild(element); // Required for this to work in FireFox
         element.click();
     }
     const getValuesFichajes = () => {
-        let values = '';
+        let values = "";
         for(let i = 0; i < fichajes.length; i++) {
-            values += fichajes[i].fecha + ' ' + fichajes[i].nom + ' ' + fichajes[i].accio;
+            values += fichajes[i].fecha + " " + fichajes[i].nom + " " + fichajes[i].accio + '\r\n';
         }
         return values;
     }
@@ -204,14 +204,26 @@ const Fichajes = () => {
                             <th scope="col">Fecha</th>
                             <th scope="col">Hora</th>
                             <th scope="col">Accion</th>
+                            <th scope="col">Ubicación</th>
                             <th scope="col">Comentario</th>
                             <th scope="col">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         {
-                            fichajes.map(({fecha, hora, accio, nom}, index) => {
-                                let accioNombre = accio === 1 ? 'Entrada' : accio === 2 ? 'Salida' : accio === 3 ? 'Inicio descanso' : 'Fin descanso';
+                            fichajes.map(({fecha, hora, minutos, accio, nom, comentari}, index) => {
+                                const accioNombre = accio === 1 ? 'Entrada' : accio === 2 ? 'Salida' : accio === 3 ? 'Inicio descanso' : 'Fin descanso';
+                                const lat = comentari.substring(23, comentari.indexOf(','));
+                                const lon = comentari.substring(comentari.lastIndexOf(',')+1).slice(0, -1);
+                                fecha = new Date(fecha);
+                                let dia = fecha.getDate().toString(), mes = (fecha.getMonth()+1).toString();
+                                if(dia.length < 2) dia = `0${dia}`;
+                                if(mes.length < 2) mes = `0${mes}`;
+                                const formatoFecha = `${dia}/${mes}/${fecha.getFullYear()}`;
+                                hora = hora.toString();
+                                minutos = minutos.toString();
+                                if(hora.length < 2) hora = `0${hora}`;
+                                if(minutos.length < 2) minutos = `0${minutos}`;
                                 return (
                                     <tr key={index}>
                                         <td>{index}</td>
@@ -220,9 +232,10 @@ const Fichajes = () => {
                                             <i className="fas fa-times-circle"></i>
                                         </td>
                                         <td>{nom}</td>
-                                        <td>{fecha}</td>
-                                        <td>{hora}</td>
+                                        <td>{formatoFecha}</td>
+                                        <td>{hora}:{minutos}</td>
                                         <td>{accioNombre}</td>
+                                        <td><a href={`https://maps.google.com/maps?q=${lat},${lon}&hl=es&z=14&amp`} target='_blank' rel='noreferrer'>Ver ubicación</a></td>
                                         <td></td>
                                         <td>
                                             <a href="'" className="btn btn-success btn-icon-split btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#modalEdit">

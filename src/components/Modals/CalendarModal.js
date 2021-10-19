@@ -16,23 +16,25 @@ const CalendarModal = ({updateEvents}) => {
         idTrabajador: ''        
     });
     useEffect(() => {
-      axios.get(`http://localhost:3030/users?empresa=${cookies.get('empresa')}`).then((data) => {
+      axios.get(`/users?empresa=${cookies.get('empresa')}`).then((data) => {
           setTrabajadores(data.data);
       });
     }, [])
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const handleOnClick = () => {
-      axios.post('http://localhost:3030/nuevoEventoCalendario', data).then((data) => {
+      axios.post('/nuevoEventoCalendario', data).then((data) => {
         updateEvents();
       });
       setShow(false);
     }
     const handleOnChange = (e) => {
-        setData({
-            ...data,
-            [e.target.name]: e.target.value,
-        });
+      let value = e.target.value;
+      if(e.target.name === 'principioEvento' || e.target.name === 'finEvento') value = new Date(value).toISOString().slice(0, 19).replace('T', ' ')
+      setData({
+          ...data,
+          [e.target.name]: value,
+      });
     }
     
     return (

@@ -22,12 +22,12 @@ const PanelDeControl = () => {
     });
     const [activos, setActivos] = useState([])
     useEffect(() => {
-        axios.get(`http://localhost:3030/totalTrabajadores?empresa=${cookies.get('empresa')}`).then((data) => {
+        axios.get(`/totalTrabajadores?empresa=${cookies.get('empresa')}`).then((data) => {
             setUserData({
                 totalTrabajadores: data.data.total-1
             })
         });
-        axios.get(`http://localhost:3030/trabajadoresActivos?empresa=${cookies.get('empresa')}`).then((data) => {
+        axios.get(`/trabajadoresActivos?empresa=${cookies.get('empresa')}`).then((data) => {
             let activos = [];
             for(let i in data.data) {
                 activos.push({
