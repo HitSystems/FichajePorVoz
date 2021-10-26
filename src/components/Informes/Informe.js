@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from "prop-types";
 import { Page, Text, View, Document, StyleSheet, Font } from '@react-pdf/renderer';
+import { Table, TableHeader, TableBody, TableCell, DataTableCell} from '@david.kucsai/react-pdf-table';
 import { cookies } from '../../helpers/cookies';
 
 Font.register({
@@ -18,7 +19,6 @@ const styles = StyleSheet.create({
     title: {
       fontSize: 24,
       textAlign: 'center',
-      fontFamily: 'Oswald'
     },
     author: {
       fontSize: 12,
@@ -26,14 +26,12 @@ const styles = StyleSheet.create({
       marginBottom: 40,
     },
     subtitle: {
-      fontSize: 18,
+      fontSize: 16,
       margin: 12,
-      fontFamily: 'Oswald'
     },
     text: {
       margin: 12,
       fontSize: 14,
-      fontFamily: 'Oswald',
       flex: 1,
     },
     image: {
@@ -100,83 +98,77 @@ const styles = StyleSheet.create({
 
 // Create Document Component
 const Informe = ({data}) => {
-    return (
-        <Document>
-        <Page style={styles.body}>
+  const [fichajes, setFichajes] = useState([]);
+  useEffect(() => {
+    let datos = data.fichajes.map(({tmst, finEvento, accio, comentari}, index) => {
+      let accioNombre;
+      const fecha = new Date(tmst);
+      let hora = fecha.getHours().toString();
+      let minutos = fecha.getMinutes().toString();
+      if(finEvento === null) {
+        accioNombre = accio === 1 ? 'Entrada' : accio === 2 ? 'Salida' : accio === 3 ? 'Inicio descanso' : accio === 4 ? 'Entrada justificada' : 'Salida justificada';
+        if(hora.length < 2) hora = `0${hora}`;
+        if(minutos.length < 2) minutos = `0${minutos}`;
+        hora += ':'
+      } else {
+        accioNombre = accio === 1 ? 'Vacaciones' : accio === 2 ? 'Día libre' : accio === 3 ? 'Baja' : 'Ausencia';
+        hora = '';
+        minutos = '';
+      }
+      let dia = fecha.getDate().toString(), mes = (fecha.getMonth()+1).toString();
+      if(dia.length < 2) dia = `0${dia}`;
+      if(mes.length < 2) mes = `0${mes}`;
+      const formatoFecha = `${dia}/${mes}/${fecha.getFullYear()}`;
+      const fechaTotal = `${formatoFecha} ${hora}${minutos}`;
+      const comentario = comentari.substring(comentari.lastIndexOf(']')+1);
+      return {
+        accioNombre,
+        fechaTotal,
+        comentario
+      }
+    })
+    setFichajes(datos);
+  }, [])
+  return (
+    <Document>
+      <Page>
         <Text style={styles.header} fixed>
-            ~ {cookies.get('empresa').slice(4)} ~
+          ~ {cookies.get('empresa').slice(4)} ~
         </Text>
         <Text style={styles.title}>{data.infoTrabajador[0].NOM}</Text>
-        <Text style={styles.author}>Informe mensual</Text>
+        <Text style={styles.author}>Informe {data.tipoInforme}</Text>
+        <Table data={fichajes}>
+          <TableHeader>
+            <TableCell>
+              Fecha
+            </TableCell>
+            <TableCell>
+              Acción
+            </TableCell>
+            <TableCell>
+              Comentario
+            </TableCell>
+            </TableHeader>
+            <TableBody>
+              <DataTableCell getContent={(r) => r.fechaTotal} />
+              <DataTableCell getContent={(r) => r.accioNombre} />
+              <DataTableCell getContent={(r) => r.comentario} />
+            </TableBody>
+        </Table>
         <Text style={styles.subtitle}>
-            Horas totales: {data.horas}
+          Horas reales: {data.horas}
+        </Text>
+        <Text style={styles.subtitle}>
+          Horas teóricas: {data.horasTotalesMes}
         </Text>
         {
-            data.error ?
-            <Text style={styles.error}>Es posible que haya un error en el total de las horas por falta de algún fichaje</Text> :
-            <Text></Text>
+          data.error ?
+          <Text style={styles.error}>Es posible que haya un error en el total de las horas por falta de algún fichaje</Text> :
+          <Text></Text>
         }
-        <View style={styles.table}>
-          <View style={[styles.row, styles.tableHeader]}>
-              <Text style={[styles.headerText, styles.cell]}>Fecha</Text>
-              <Text style={[styles.headerText, styles.cell]}>Acción</Text>
-              <Text style={[styles.headerText, styles.cell]}>Comentario</Text>
-          </View>
-            {
-                data.fichajes.map(({tmst, finEvento, accio, comentari}, index) => {
-                  let accioNombre;
-                  if(finEvento === null) {
-                    accioNombre = accio === 1 ? 'Entrada' : accio === 2 ? 'Salida' : accio === 3 ? 'Inicio descanso' : accio === 4 ? 'Entrada justificada' : 'Salida justificada';
-                  } else {
-                    accioNombre = accio === 1 ? 'Vacaciones' : accio === 2 ? 'Día libre' : accio === 3 ? 'Baja' : 'Ausencia';
-                  }
-                  const fecha = new Date(tmst);
-                  let dia = fecha.getDate().toString(), mes = (fecha.getMonth()+1).toString();
-                  if(dia.length < 2) dia = `0${dia}`;
-                  if(mes.length < 2) mes = `0${mes}`;
-                  const formatoFecha = `${dia}/${mes}/${fecha.getFullYear()}`;
-                  let hora = fecha.getHours().toString();
-                  let minutos = fecha.getMinutes().toString();
-                  if(hora.length < 2) hora = `0${hora}`;
-                  if(minutos.length < 2) minutos = `0${minutos}`;
-                  return (
-                    <View style={[styles.row]} key={index}>
-                      <Text style={[styles.cell]}>{formatoFecha} {hora}:{minutos}</Text>
-                      <Text style={[styles.cell]}>{accioNombre}</Text>
-                      <Text style={[styles.cell]}>{comentari.substring(comentari.lastIndexOf(']')+1)}</Text>
-                    </View>
-                  );
-                })
-            }
-        </View>
-        <Text style={styles.text}>
-
-        </Text>
-        <Text style={styles.text}>
-        </Text>
-        <Text style={styles.text}>
-
-        </Text>
-        <Text style={styles.subtitle} break>
-
-        </Text>
-    
-        <Text style={styles.text}>
-            
-        </Text>
-        <Text style={styles.text}>
-        </Text>
-        <Text style={styles.text}>
-            
-        </Text>
-        <Text style={styles.text}>
-        </Text>
-        <Text style={styles.text}>
-    
-        </Text>
-        </Page>
-    </Document>
-    )
+    </Page>
+  </Document>
+  )
 };
 
 Informe.propTypes = {
