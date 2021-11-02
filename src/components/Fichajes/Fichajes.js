@@ -5,6 +5,15 @@ import { cookies } from '../../helpers/cookies';
 import Footer from '../Footer/Footer';
 import Topbar from '../Topbar/Topbar';
 
+const initialStateDatosFichaje = {
+    nombre: '',
+    fecha: '',
+    hora: '',
+    comentario: '',
+    fichajeId: '',
+    empresa: '',
+};
+
 const Fichajes = () => {
     const [trabajadores, setTrabajadores] = useState([]);
     const [fichajes, setFichajes] = useState([]);
@@ -21,7 +30,8 @@ const Fichajes = () => {
     const [tiempo, setTiempo] = useState({
         hora: '',
         minutos: '',
-    })
+    });
+    const [datosFichaje, setDatosFichaje] = useState(initialStateDatosFichaje);
     useEffect(() => {
         axios.get(`/users?empresa=${cookies.get('empresa')}`).then((data) => {
             setTrabajadores(data.data);
@@ -109,6 +119,31 @@ const Fichajes = () => {
             values += fichajes[i].fecha + " " + fichajes[i].nom + " " + fichajes[i].accio + '\r\n';
         }
         return values;
+    }
+    const handleOnChangeComentario = (e) => {
+        setDatosFichaje({
+            ...datosFichaje,
+            [e.target.name]: e.target.value,
+        })
+    }
+    const handleComentarioClick = (e) => {
+        e.preventDefault();
+        setDatosFichaje(initialStateDatosFichaje);
+        setDatosFichaje({
+            nombre: e.target.getAttribute('nombre'),
+            fecha: e.target.getAttribute('fecha'),
+            hora: `${e.target.getAttribute('hora')}:${e.target.getAttribute('minutos')}`,
+            comentario: e.target.getAttribute('comentario'),
+            fichajeId: e.target.getAttribute('fichajeid'),
+            empresa: cookies.get('empresa',)
+        });
+        console.log(datosFichaje);
+    }
+    const actualizarComentario = (e) => {
+        e.preventDefault();
+        axios.post('/actualizarComentario', datosFichaje).then((data) => {
+            getFichajes();
+        })
     }
     return (
         <div id="content-wrapper" class="d-flex flex-column">
@@ -211,10 +246,11 @@ const Fichajes = () => {
                     </thead>
                     <tbody>
                         {
-                            fichajes.map(({fecha, hora, minutos, accio, nom, comentari}, index) => {
-                                const accioNombre = accio === 1 ? 'Entrada' : accio === 2 ? 'Salida' : accio === 3 ? 'Inicio descanso' : 'Fin descanso';
+                            fichajes.map(({fecha, hora, minutos, accio, idr, comentari, nom}, index) => {
+                                const accioNombre = accio === 1 ? 'Entrada' : accio === 2 ? 'Salida' : accio === 3 ? 'Inicio descanso' : accio === 4 ? 'Fin descanso' : accio === 5 ? 'Salida justificada' : 'Entrada justificada';
                                 const lat = comentari.substring(23, comentari.indexOf(','));
                                 const lon = comentari.substring(comentari.lastIndexOf(',')+1).slice(0, -1);
+                                const comentario = comentari.substring(comentari.lastIndexOf(']')+1);
                                 fecha = new Date(fecha);
                                 let dia = fecha.getDate().toString(), mes = (fecha.getMonth()+1).toString();
                                 if(dia.length < 2) dia = `0${dia}`;
@@ -236,13 +272,15 @@ const Fichajes = () => {
                                         <td>{hora}:{minutos}</td>
                                         <td>{accioNombre}</td>
                                         <td><a href={`https://maps.google.com/maps?q=${lat},${lon}&hl=es&z=14&amp`} target='_blank' rel='noreferrer'>Ver ubicación</a></td>
-                                        <td></td>
+                                        <td>{comentario}</td>
                                         <td>
-                                            <a href="'" className="btn btn-success btn-icon-split btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#modalEdit">
-                                            <span className="icon text-white-50">
-                                            <i className="fas fa-pencil-alt"></i>
-                                            </span>
-                                            <span className="text">Comentario</span>
+                                            <a href="'" name={idr} className="btn btn-success btn-icon-split btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#modalEdit" onClick={handleComentarioClick}>
+                                                <span fichajeid={idr} nombre={nom} fecha={formatoFecha} hora={hora} minutos={minutos} comentario={comentario} className="icon text-white-50" onClick={handleComentarioClick}>
+                                                    <i name={idr} className="fas fa-pencil-alt" onClick={handleComentarioClick}></i>
+                                                </span>
+                                                <span fichajeid={idr} nombre={nom} fecha={formatoFecha} hora={hora} minutos={minutos} comentario={comentario} className="text" onClick={handleComentarioClick}>
+                                                    Comentario
+                                                </span>
                                             </a>
                                         </td>
                                     </tr>
@@ -343,25 +381,25 @@ const Fichajes = () => {
                     <div className="modal-body">
                         <ul className="list-group list-group-flush">
                             <li className="list-group-item">
-                                <b>Para:</b> Santiago Camp Estrada
+                                <b>Para:</b> {datosFichaje.nombre}
                             </li>
                             <li className="list-group-item">
-                                <b>Fecha:</b> 30-08-2021
+                                <b>Fecha:</b> {datosFichaje.fecha}
                             </li>
                             <li className="list-group-item">
-                                <b>Hora:</b> 00:00:00h
+                                <b>Hora:</b> {datosFichaje.hora}h
                             </li>
                             <li className="list-group-item">
                                 <div className="form-group">
                                 <label for="comentario"><b>Comentario</b></label>
-                                <textarea className="form-control" id="comentario" rows="3"></textarea>
+                                <textarea name='comentario' className="form-control" id="comentario" rows="3" onChange={handleOnChangeComentario} value={datosFichaje.comentario}></textarea>
                                 </div>
                             </li>
                         </ul>
                     </div>
                     <div className="modal-footer">
                         <button type="button" className="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
-                        <button type="button" className="btn btn-primary btn-sm">Guardar</button>
+                        <button type="button" className="btn btn-primary btn-sm" onClick={actualizarComentario} data-dismiss="modal">Guardar</button>
                     </div>
                     </form>
                 </div>

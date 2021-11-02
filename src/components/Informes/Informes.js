@@ -230,7 +230,7 @@ const Informes = () => {
                                                 let hora = fecha.getHours().toString();
                                                 let minutos = fecha.getMinutes().toString();
                                                 if(finEvento === null) {
-                                                    accioNombre = accio === 1 ? 'Entrada' : accio === 2 ? 'Salida' : accio === 3 ? 'Inicio descanso' : accio === 4 ? 'Entrada justificada' : 'Salida justificada';
+                                                    accioNombre = accio === 1 ? 'Entrada' : accio === 2 ? 'Salida' : accio === 3 ? 'Inicio descanso' : accio === 4 ? 'Fin descanso' : accio === 5 ? 'Salida justificada' : 'Entrada justificada';
                                                     if(hora.length < 2) hora = `0${hora}`;
                                                     if(minutos.length < 2) minutos = `0${minutos}`;
                                                     hora += ':'
@@ -291,7 +291,12 @@ const Informes = () => {
                             <div className='row'>
                                 <div className='col'>
                                     <h3>Horas reales: {userData.horas}</h3>
-                                    <h3>Horas teóricas: {userData.horasTotalesMes}</h3>
+                                    <h3>Horas teóricas: {userData.datosAcciones.suma}</h3>
+                                    <h3>Días de vacaciones: {userData.datosAcciones.tipoDia[1]}</h3>
+                                    <h3>Días libres: {userData.datosAcciones.tipoDia[2]}</h3>
+                                    <h3>Días de baja: {userData.datosAcciones.tipoDia[3]}</h3>
+                                    <h3>Días de ausencia: {userData.datosAcciones.tipoDia[4]}</h3>
+                                    <h3>Tiempo de descanso: {userData.tiempoDescanso}</h3>
                                 </div>
                             </div>
                         :

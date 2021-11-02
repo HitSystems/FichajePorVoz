@@ -159,7 +159,22 @@ const Informe = ({data}) => {
           Horas reales: {data.horas}
         </Text>
         <Text style={styles.subtitle}>
-          Horas teóricas: {data.horasTotalesMes}
+          Horas teóricas: {data.datosAcciones.suma}
+        </Text>
+        <Text style={styles.subtitle}>
+          Días de vacaciones: {data.datosAcciones.tipoDia[1]}
+        </Text>
+        <Text style={styles.subtitle}>
+          Días libres: {data.datosAcciones.tipoDia[2]}
+        </Text>
+        <Text style={styles.subtitle}>
+          Días de baja: {data.datosAcciones.tipoDia[3]}
+        </Text>
+        <Text style={styles.subtitle}>
+          Días de ausencia: {data.datosAcciones.tipoDia[4]}
+        </Text>
+        <Text style={styles.subtitle}>
+          Tiempo de descanso: {data.tiempoDescanso}
         </Text>
         {
           data.error ?
