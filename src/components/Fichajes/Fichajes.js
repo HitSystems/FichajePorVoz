@@ -379,7 +379,7 @@ const Fichajes = () => {
                         </button>
                     </div>
                     <div className="modal-body">
-                        <ul className="list-group list-group-flush">
+                        <ul className="list-group list-group-flush">``
                             <li className="list-group-item">
                                 <b>Para:</b> {datosFichaje.nombre}
                             </li>
