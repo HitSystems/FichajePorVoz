@@ -5,9 +5,18 @@ import { cookies } from '../../helpers/cookies';
 const Topbar = () => {
     const [imagen, setImagen] = useState('');
     useEffect(() => {
-        axios.get(`/datosTrabajador?empresa=${cookies.get('empresa')}&idUsuario=${cookies.get('idUsuario')}`).then((data) => {
+        const source = axios.CancelToken.source();
+        axios.get(`/datosTrabajador?empresa=${cookies.get('empresa')}&idUsuario=${cookies.get('idUsuario')}`, { cancelToken: source.token }).then((data) => {
             setImagen(data.data.imagen);
+        }).catch((err) => {
+            if (axios.isCancel(err)) {
+            } else {
+                throw err;
+            }
         })
+        return () => {
+            source.cancel();
+        }
     }, [])
     return (
         <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">

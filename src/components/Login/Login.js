@@ -1,17 +1,69 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import $ from 'jquery';
+import { GoogleLogin } from 'react-google-login';
+import axios from 'axios';
 import logo from '../../assets/img/logo.png';
+import { cookies } from '../../helpers/cookies';
 
-
-const Login = () => {
+const Login = (props) => {
+    const [userInputs, setUserInputs] = useState({
+        email: '',
+        passwd: '',
+        google: false,
+    })
     useEffect(() => {
         document.getElementById('accordionSidebar').style.display = 'none';
         $('body').addClass('bg-gradient-primary');
         // document.getElementById('wrapper').setAttribute('id', 'none');
         $('#wrapper').contents().unwrap();
     }, []);
+    const responseGoogle = (response) => {
+        const { email, givenName, googleId, name } = response.profileObj;
+        const data = {
+            email,
+            givenName,
+            googleId,
+            name,
+            google: true,
+        }
+        axios.post('/iniciar-sesion', data).then(({data}) => {
+            console.log(data);
+            cookies.set('empresa', data.empresa);
+            cookies.set('nombre', data.nombre);
+            cookies.set('mail', data.mail);
+            cookies.set('idUsuario', data.idTrabajador);
+            cookies.set('accionUltimoFichaje', data.accionUltimoFichaje);
+            cookies.set('accionUltimoDescanso', data.accionUltimoDescanso);
+            cookies.set('loggedIn', true);
+            window.location.href = '/FichajePorVoz/';
+        }).catch((err) => {
+            console.log(err);
+        });
+    }
+    const handleOnChange = (e) => {
+        e.preventDefault();
+        setUserInputs({
+            ...userInputs,
+            [e.target.name]: e.target.value,
+        });
+    }
+    const handleOnClick = (e) => {
+        e.preventDefault();
+        axios.post('/iniciar-sesion', userInputs).then(({data}) => {
+            console.log(data)
+            cookies.set('empresa', data.empresa);
+            cookies.set('nombre', data.nombre);
+            cookies.set('mail', data.mail);
+            cookies.set('idUsuario', data.idTrabajador);
+            cookies.set('accionUltimoFichaje', data.accionUltimoFichaje);
+            cookies.set('accionUltimoDescanso', data.accionUltimoDescanso);
+            window.location.href = '/FichajePorVoz/';
+        }).catch((err) => {
+            console.log(err);
+        });
+    }
     return (
-        <>
+        <div>
         <div className="container">
 
         <div className="row justify-content-center">
@@ -37,11 +89,11 @@ const Login = () => {
                                         <div className="form-group">
                                             <input type="email" className="form-control form-control-user"
                                                 id="exampleInputEmail" aria-describedby="emailHelp"
-                                                placeholder="Email" autocomplete="off" />
+                                                placeholder="Email" name='email' autocomplete="off" onChange={handleOnChange} />
                                         </div>
                                         <div className="form-group">
                                             <input type="password" className="form-control form-control-user"
-                                                id="exampleInputPassword" placeholder="Contraseña" autocomplete="off" />
+                                                id="exampleInputPassword" placeholder="Contraseña" name='passwd' autocomplete="off" onChange={handleOnChange} />
                                         </div>
                                         <div className="form-group">
                                             <div className="custom-control custom-checkbox small">
@@ -49,11 +101,17 @@ const Login = () => {
                                                 <label className="custom-control-label" for="customCheck">Recordarme</label>
                                             </div>
                                         </div>
-                                        <a href="panel-de-control.html" className="btn btn-primary btn-user btn-block btn-login">
+                                        <button type='submit' className="btn btn-primary btn-user btn-block btn-login" onClick={handleOnClick}>
                                             Entrar
-                                        </a>
+                                        </button>
                                         <hr />
-                                        <a href="#" className="btn btn-google btn-block btn-user"><i className="fab fa-google fa-fw"></i> Google</a>
+                                        <GoogleLogin
+                                            clientId="168682957180-4nbhoep09je83rtufob9c7954g1447nl.apps.googleusercontent.com"
+                                            buttonText="Iniciar sesión"
+                                            onSuccess={responseGoogle}
+                                            onFailure={responseGoogle}
+                                            cookiePolicy={'single_host_origin'}
+                                        />
                                     </form>
                                     <hr />
                                     <div className="text-center">
@@ -81,7 +139,7 @@ const Login = () => {
             </div>
         </div>
     </footer>
-    </>
+    </div>
     )
 }
 

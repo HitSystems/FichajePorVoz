@@ -16,12 +16,17 @@ import {
     BrowserRouter as Router,
     Switch,
     Route,
-    NavLink
+    NavLink,
+    withRouter,
   } from 'react-router-dom';
 import Perfil from '../Perfil/Perfil';
+import { cookies } from '../../helpers/cookies';
 
-const Menu = () => {
+const Menu = (props) => {
       useEffect(() => {
+        if(window.location.pathname !== '/FichajePorVoz/iniciar-sesion') {
+            if(!cookies.get('loggedIn')) props.history.push('/FichajePorVoz/iniciar-sesion');
+        }
           // Toggle the side navigation
           $("#sidebarToggle, #sidebarToggleTop").on('click', function(e) {
               $("body").toggleClass("sidebar-toggled");
@@ -76,7 +81,7 @@ const Menu = () => {
       }, [])
       
     return (
-        <Router>
+        <>
             <ul className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion testSanty" id="accordionSidebar">
                 <a className="sidebar-brand d-flex align-items-center justify-content-center" href="panel-de-control.html">
                     <div className="sidebar-brand-icon" style={{display: 'none'}}>
@@ -138,8 +143,8 @@ const Menu = () => {
                 <Route exact path="/FichajePorVoz/panel-de-control" component={PanelDeControl} />
                 <Route path="/" component={PanelDeControl} />
             </Switch> 
-        </Router>
+        </>
     )
 }
 
-export default Menu;
+export default withRouter(Menu);

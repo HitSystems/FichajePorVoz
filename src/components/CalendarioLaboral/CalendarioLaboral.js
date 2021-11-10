@@ -12,6 +12,7 @@ const CalendarioLaboral = () => {
         console.log('Click en el dia');
     }
     useEffect(() => {
+        //if(!cookies.get('loggedIn')) window.location.href = '/FichajePorVoz/inicar-sesion';
         axios.get(`/eventosCalendario?empresa=${cookies.get('empresa')}&idTrabajador=0`).then((data) => {
             setEvents(data.data);
         });

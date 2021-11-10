@@ -22,11 +22,23 @@ const Informes = () => {
     const [year, setYear] = useState(new Date().getFullYear());
     const [csvData, setCsvData] = useState(null);
     useEffect(() => {
+        if(!cookies.get('loggedIn')) {
+            console.log('Entro')
+        }
+        const source = axios.CancelToken.source();
         getUserData(cookies.get('idUsuario'), 1);
         updateCsvData(cookies.get('idUsuario'), 1);
-        axios.get(`/users?empresa=${cookies.get('empresa')}`).then((data) => {
+        axios.get(`/users?empresa=${cookies.get('empresa')}`, { cancelToken: source.token }).then((data) => {
             setTrabajadores(data.data);
+        }).catch((err) => {
+            if (axios.isCancel(err)) {
+            } else {
+                throw err;
+            }
         });
+        return () => {
+            source.cancel();
+        }
     }, []);
     const getUserData = (id = cookies.get('idUsuario'), periodo = 1) => {
         axios.get(`/informe?empresa=${cookies.get('empresa')}&idTrabajador=${id}&periodo=${periodo}&dia=${dia}&mes=${mes}&year=${year}`).then((data) => {

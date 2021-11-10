@@ -6,11 +6,31 @@ import { cookies } from '../../helpers/cookies';
 
 const TodosLosTrabajadores = () => {
     const [trabajadores, setTrabajadores] = useState([]);
+    const [busqueda, setBusqueda] = useState('');
     useEffect(() => {
-        axios.get(`/users?empresa=${cookies.get('empresa')}`).then((data) => {
+        const source = axios.CancelToken.source();
+        //if(!cookies.get('loggedIn')) window.location.href = '/FichajePorVoz/inicar-sesion';
+        axios.get(`/users?empresa=${cookies.get('empresa')}&busqueda=${busqueda}`, { cancelToken: source.token }).then((data) => {
             setTrabajadores(data.data);
+        }).catch((err) => {
+            if (axios.isCancel(err)) {
+            } else {
+                throw err;
+            }
+        })
+        return () => {
+            source.cancel();
+        }
+    }, [busqueda]);
+    const handleOnChangeBusqueda = (e) => {
+        setBusqueda(e.target.value);
+    }
+    const borrarTrabajador = (e) => {
+        e.preventDefault();
+        axios.post('/borrarTrabajador', { empresa: cookies.get('empresa'), idTrabajador: e.target.getAttribute('idtrabajador') }).then((data) => {
+            setBusqueda('');
         });
-    }, [])
+    }
     return (
         <div id='content-wrapper' className='d-flex flex-column'>
         <div id='content'>
@@ -30,19 +50,16 @@ const TodosLosTrabajadores = () => {
                     <h6 classname="m-0 font-weight-bold text-primary float-left" style={{paddingTop: '7px'}}>Listado de Trabajadores</h6>
                     <div className="float-right">
                         <div className="row">
-                        <div className="col-md-8">
+                        <div className="col">
                             <form className="form-search-c">
-                            <input type="search" classname="form-control" placeholder="Buscar" style={{maxWidth: '280px'}} />
-                                <button className="btn btn-primary btn-sm" type="submit">
-                                <i className="fa fa-search"></i>
-                                </button>
+                                <input type="search" className="form-control" placeholder="Buscar" style={{maxWidth: '280px'}} onChange={handleOnChangeBusqueda} value={busqueda} />
                             </form>
                         </div>
-                        <div className="col-md-4">
+                        {/*<div className="col-md-4">
                             <button type="button" className="btn btn-info btn-sm btn-primary shadow-sm btn-filter">
                             <i className="fas fa-filter"></i>
                             </button>
-                        </div>
+                        </div>*/}
                         </div>
                     </div>
                 </div>
@@ -109,7 +126,7 @@ const TodosLosTrabajadores = () => {
                                                 <td> - </td>
                                                 <td>
                                                     <button className="btn btn-success btn-sm"><i className="fa fa-eye"></i></button>
-                                                    <button className="btn btn-danger btn-sm"><i className="fa fa-trash"></i></button>
+                                                    <button className="btn btn-danger btn-sm" idtrabajador={id} onClick={borrarTrabajador}><i idtrabajador={id} onClick={borrarTrabajador} className="fa fa-trash"></i></button>
                                                 </td>
                                             </tr>
                                         )

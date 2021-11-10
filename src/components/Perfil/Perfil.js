@@ -10,14 +10,24 @@ const Perfil = () => {
         direccion: ''
     });
     useEffect(() => {
-        axios.get(`/datosTrabajador?empresa=${cookies.get('empresa')}&idUsuario=${cookies.get('idUsuario')}`).then((data) => {
+        //if(!cookies.get('loggedIn')) window.location.href = '/FichajePorVoz/inicar-sesion';
+        const source = axios.CancelToken.source();
+        axios.get(`/datosTrabajador?empresa=${cookies.get('empresa')}&idUsuario=${cookies.get('idUsuario')}`, { cancelToken: source.token }).then((data) => {
             setDatosTrabajador({
                 telefono: '',
                 movil: data.data.movil,
                 direccion: data.data.direccion,
                 imagen: data.data.imagen,
             })
+        }).catch((err) => {
+            if (axios.isCancel(err)) {
+            } else {
+                throw err;
+            }
         })
+        return () => {
+            source.cancel();
+        }
     }, [])
     return (
         <div id='content-wrapper' className='d-flex flex-column'>

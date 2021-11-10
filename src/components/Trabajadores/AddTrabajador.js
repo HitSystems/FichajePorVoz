@@ -11,6 +11,7 @@ const AddTrabajador = (props) => {
         primerApellido: '',
         segundoApellido: '',
         email: '',
+        passwd: '',
         genero: '',
         dni: '',
         telefono: '',
@@ -19,6 +20,13 @@ const AddTrabajador = (props) => {
         direccion: '',
         fechaAlta: '',
         cargo: '',
+        hBase_L: '',
+        hBase_M: '',
+        hBase_X: '',
+        hBase_J: '',
+        hBase_V: '',
+        hBase_S: '',
+        hBase_D: '',
         informacionComplementaria: '',
         administrador: false,
         empresa: cookies.get('empresa'),
@@ -46,17 +54,31 @@ const AddTrabajador = (props) => {
     }
     const nuevoTrabajador = async (e) => {
         e.preventDefault();
-        axios.post('/nuevoTrabajador', datos).then(({ data }) => {
-            const dataUsuario = {
-                id: data.id,
-                imagen: imagen,
-                empresa: cookies.get('empresa'),
+        const notRequireds = ['hBase_L', 'hBase_M', 'hBase_X', 'hBase_J', 'hBase_V', 'hBase_S', 'hBase_D', 'informacionComplementaria'];
+        let formOk = true;
+        for(let item in datos) {
+            if(!(item in notRequireds)) {
+                if(!datos[item].trim()) {
+                    formOk = false;
+                    break;
+                }
             }
-            if(imagen !== '') {
-                socket.emit('imagenUsuario', dataUsuario);
-            }
-        });
-        props.history.push('/FichajePorVoz/trabajadores');
+        }
+        if(formOk) {
+            axios.post('/nuevoTrabajador', datos).then(({ data }) => {
+                const dataUsuario = {
+                    id: data.id,
+                    imagen: imagen,
+                    empresa: cookies.get('empresa'),
+                }
+                if(imagen !== '') {
+                    socket.emit('imagenUsuario', dataUsuario);
+                }
+            });
+            props.history.push('/FichajePorVoz/trabajadores');
+        } else {
+            alert(`No pueden haber campos vacíos. \nLos únicos campos vacíos pueden ser los siguientes: Lunes, Martes, Miércoles, Jueves, Viernes, Sábado, Domingo e Información Complementaria`);
+        }
     }
     return (
         <div id='content-wrapper' className='d-flex flex-column'>
@@ -95,65 +117,100 @@ const AddTrabajador = (props) => {
                             <div className="row">
                                 <div className="col-md-4">
                                     <label for="nombre">Nombre</label>
-                                    <input type="text" className="form-control" id="nombre" placeholder="Nombre" name='nombre' onChange={handleOnChange} />
+                                    <input type="text" className="form-control" id="nombre" placeholder="Nombre*" name='nombre' onChange={handleOnChange} required />
                                 </div>
                                 <div className="col-md-4">
                                     <label for="apellido1">Primer Apellido</label>
-                                    <input type="text" className="form-control" id="apellido1" placeholder="Primer Apellido" name='primerApellido' onChange={handleOnChange} />
+                                    <input type="text" className="form-control" id="apellido1" placeholder="Primer Apellido*" name='primerApellido' onChange={handleOnChange} required />
                                 </div>
                                 <div className="col-md-4">
                                     <label for="apellido2">Segundo Apellido</label>
-                                    <input type="text" className="form-control" id="apellido2" placeholder="Segundo Apellido" name='segundoApellido' onChange={handleOnChange} />
+                                    <input type="text" className="form-control" id="apellido2" placeholder="Segundo Apellido" name='segundoApellido' onChange={handleOnChange} required />
                                 </div>
                             </div>
                             <br />
                             <div className="row">
-                                <div className="col-md-4">
+                                <div className="col-md-3">
                                     <label for="email">Correo Electrónico</label>
-                                    <input type="email" className="form-control" id="email" placeholder="Email" name='email' onChange={handleOnChange} />
+                                    <input type="email" className="form-control" id="email" placeholder="Email*" name='email' onChange={handleOnChange} required />
                                 </div>
-                                <div className='col-md-4'>
+                                <div className="col-md-3">
+                                    <label for="email">Contraseña</label>
+                                    <input type="password" className="form-control" id="passwd" placeholder="Contraseña" name='passwd' onChange={handleOnChange} required />
+                                </div>
+                                <div className='col-md-3'>
                                     <label for='genero'>Género</label>
-                                    <select className='form-control' id='genero' name='genero' onChange={handleOnChange}>
+                                    <select className='form-control' id='genero' name='genero' placeholder='Género*' onChange={handleOnChange} required>
                                         <option></option>
                                         <option value='femenino'>Femenino</option>
                                         <option value='masculino'>Masculino</option>
                                         <option value='no_binario'>No binario</option>
                                     </select>
                                 </div>
-                                <div className='col-md-4'>
+                                <div className='col-md-3'>
                                     <label for='dni'>DNI</label>
-                                    <input type='text' className='form-control' id='dni' placeholder='DNI' name='dni' onChange={handleOnChange} />
+                                    <input type='text' className='form-control' id='dni' placeholder='DNI*' name='dni' onChange={handleOnChange} required />
                                 </div>
                             </div>
                             <br />
                             <div className="row">
                                 <div className="col-md-2">
                                     <label for="telf">Teléfono</label>
-                                    <input type="text" className="form-control" id="telf" placeholder="Teléfono" name='telefono' onChange={handleOnChange} />
+                                    <input type="text" className="form-control" id="telf" placeholder="Teléfono*" name='telefono' onChange={handleOnChange} required />
                                 </div>
                                 <div className="col-md-2">
                                     <label for="mbl">Móvil</label>
-                                    <input type="text" className="form-control" id="mbl" placeholder="Móvil" name='movil' onChange={handleOnChange} />
+                                    <input type="text" className="form-control" id="mbl" placeholder="Móvil*" name='movil' onChange={handleOnChange} required />
                                 </div>
                                 <div className="col-md-2">
                                     <label for="cumple">Nacido el</label>
-                                    <input type="date" className="form-control" id="cumple" placeholder="Fecha de nacimiento" name='nacimiento' onChange={handleOnChange} />
+                                    <input type="date" className="form-control" id="cumple" placeholder="Fecha de nacimiento*" name='nacimiento' onChange={handleOnChange} required />
                                 </div>
                                 <div className="col-md-6">
                                     <label for="dir">Dirección</label>
-                                    <input type="text" className="form-control" id="dir" placeholder="Dirección" name='direccion' onChange={handleOnChange} />
+                                    <input type="text" className="form-control" id="dir" placeholder="Dirección*" name='direccion' onChange={handleOnChange} required />
                                 </div>
                             </div>
                             <br />
                             <div className="row">
-                                <div className="col-md-2">
+                            <div className="col-md-2">
                                     <label for="alta">Fecha de Alta</label>
-                                    <input type="date" className="form-control" id="alta" placeholder="alta" name='fechaAlta' onChange={handleOnChange} />
+                                    <input type="date" className="form-control" id="alta" placeholder="alta*" name='fechaAlta' onChange={handleOnChange} required />
                                 </div>
                                 <div className="col-md-10">
                                     <label for="cargo">Cargo</label>
-                                    <input type="text" className="form-control" id="cargo" placeholder="Cargo" name='cargo' onChange={handleOnChange} />
+                                    <input type="text" className="form-control" id="cargo" placeholder="Cargo*" name='cargo' onChange={handleOnChange} required />
+                                </div>
+                            </div>
+                            <br />
+                            <div className="row">
+                                <div className="col">
+                                    <label for="hBase_L">Lunes</label>
+                                    <input type="number" className="form-control" id="hBase_L" placeholder="Horas" name='hBase_L' onChange={handleOnChange} />
+                                </div>
+                                <div className="col">
+                                    <label for="hBase_M">Martes</label>
+                                    <input type="number" className="form-control" id="hBase_M" placeholder="Horas" name='hBase_M' onChange={handleOnChange} />
+                                </div>
+                                <div className="col">
+                                    <label for="hBase_X">Miércoles</label>
+                                    <input type="number" className="form-control" id="hBase_X" placeholder="Horas" name='hBase_X' onChange={handleOnChange} />
+                                </div>
+                                <div className="col">
+                                    <label for="hBase_J">Jueves</label>
+                                    <input type="number" className="form-control" id="hBase_J" placeholder="Horas" name='hBase_J' onChange={handleOnChange} />
+                                </div>
+                                <div className="col">
+                                    <label for="hBase_V">Viernes</label>
+                                    <input type="number" className="form-control" id="hBase_V" placeholder="Horas" name='hBase_V' onChange={handleOnChange} />
+                                </div>
+                                <div className="col">
+                                    <label for="hBase_S">Sábado</label>
+                                    <input type="number" className="form-control" id="hBase_S" placeholder="Horas" name='hBase_S' onChange={handleOnChange} />
+                                </div>
+                                <div className="col">
+                                    <label for="hBase_D">Domingo</label>
+                                    <input type="number" className="form-control" id="hBase_D" placeholder="Horas" name='hBase_D' onChange={handleOnChange} />
                                 </div>
                             </div>
                             <br />

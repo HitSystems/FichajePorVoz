@@ -10,24 +10,26 @@ import trabajadores from '../../assets/img/trabajadores.jpg';
 import { cookies } from '../../helpers/cookies';
 import axios from 'axios';
 import { NavLink } from 'react-router-dom';
-const PanelDeControl = () => {
-    cookies.set('empresa', 'Fac_DemoGrafix');
-    cookies.set('nombre', 'Juan');
-    cookies.set('mail', 'demohit@gmail.com');
-    cookies.set('idUsuario', '2');
-    cookies.set('accionUltimoFichaje', '1');
-    cookies.set('accionUltimoDescanso', '4');
+const PanelDeControl = (props) => {
     const [userData, setUserData] = useState({
         totalTrabajadores: 0,
     });
     const [activos, setActivos] = useState([])
     useEffect(() => {
-        axios.get(`/totalTrabajadores?empresa=${cookies.get('empresa')}`).then((data) => {
+        //if(!cookies.get('loggedIn')) window.location.href = '/FichajePorVoz/iniciar-sesion';
+        //if(!cookies.get('loggedIn')) props.history.push('/FichajePorVoz/iniciar-sesion');
+        const source = axios.CancelToken.source()
+        axios.get(`/totalTrabajadores?empresa=${cookies.get('empresa')}`, { cancelToken: source.token }).then((data) => {
             setUserData({
                 totalTrabajadores: data.data.total-1
             })
+        }).catch((err) => {
+            if (axios.isCancel(err)) {
+            } else {
+                throw err;
+            }
         });
-        axios.get(`/trabajadoresActivos?empresa=${cookies.get('empresa')}`).then((data) => {
+        axios.get(`/trabajadoresActivos?empresa=${cookies.get('empresa')}`, { cancelToken: source.token }).then((data) => {
             let activos = [];
             for(let i in data.data) {
                 activos.push({
@@ -36,7 +38,15 @@ const PanelDeControl = () => {
                 });
             }
             setActivos(activos);
-        })
+        }).catch((err) => {
+            if (axios.isCancel(err)) {
+            } else {
+                throw err;
+            }
+        });
+        return () => {
+            source.cancel();
+        }
     }, [])
    
     return (
